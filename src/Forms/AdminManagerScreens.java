@@ -1,3 +1,5 @@
+package Forms;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -7,6 +9,9 @@
  *
  * @author julio
  */
+import Forms.EditUsers;
+import javax.swing.JOptionPane; 
+
 public class AdminManagerScreens extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminManagerScreens.class.getName());
@@ -16,6 +21,7 @@ public class AdminManagerScreens extends javax.swing.JFrame {
      */
     public AdminManagerScreens() {
         initComponents();
+        setLocationRelativeTo(null); // centrar ventana
     }
 
     /**
@@ -37,11 +43,21 @@ public class AdminManagerScreens extends javax.swing.JFrame {
         BtnCustomer.setText("Customer");
         BtnCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCustomerActionPerformed(evt);
+            }
+        });
 
         BtnMovies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Movie.png"))); // NOI18N
         BtnMovies.setText("Movies");
         BtnMovies.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnMovies.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnMovies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnMoviesActionPerformed(evt);
+            }
+        });
 
         BtnRentals.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Coke.jpg"))); // NOI18N
         BtnRentals.setText("Rentals");
@@ -74,6 +90,19 @@ public class AdminManagerScreens extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BtnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCustomerActionPerformed
+        // TODO add your handling code here:
+       EditUsers usersForm = new EditUsers();
+       usersForm.setVisible(true);
+
+        
+        
+    }//GEN-LAST:event_BtnCustomerActionPerformed
+
+    private void BtnMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMoviesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnMoviesActionPerformed
 
     /**
      * @param args the command line arguments

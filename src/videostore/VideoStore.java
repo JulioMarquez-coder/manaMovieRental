@@ -8,13 +8,32 @@ package videostore;
  *
  * @author julio
  */
+import Forms.LoginForm;
+import database.DBConnection;
+import java.sql.Connection;
+
+
 public class VideoStore {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        try {
+            Connection cn = DBConnection.getConnection();
+            System.out.println("Coneccion correcta a la base de datos!");
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("Error al conectar:");
+            e.printStackTrace();
+        }
+        
+        
+        java.awt.EventQueue.invokeLater(new Runnable(){
+            public void run() {
+                new LoginForm().setVisible(true);
+            }
+        });
     }
     
 }
