@@ -61,7 +61,6 @@ private void loadUsers() {
                 "Error cargando usuarios:\n" + e.getMessage());
     }
 }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -146,6 +145,86 @@ private void loadUsers() {
 
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
         // TODO add your handling code here:
+        // Pedir datos por ventanitas
+    String firstName  = JOptionPane.showInputDialog(this, "First name:");
+    if (firstName == null) return;  // Canceló
+
+    String middleName = JOptionPane.showInputDialog(this, "Middle name (opcional):");
+    if (middleName == null) middleName = "";
+
+    String lastName   = JOptionPane.showInputDialog(this, "Last name:");
+    if (lastName == null) return;
+
+    String phone      = JOptionPane.showInputDialog(this, "Phone (opcional):");
+    if (phone == null) phone = "";
+
+    String address    = JOptionPane.showInputDialog(this, "Address (opcional):");
+    if (address == null) address = "";
+
+    String city       = JOptionPane.showInputDialog(this, "City (opcional):");
+    if (city == null) city = "";
+
+    String zipCode    = JOptionPane.showInputDialog(this, "Zip code (opcional):");
+    if (zipCode == null) zipCode = "";
+
+    String birthDate  = JOptionPane.showInputDialog(
+            this, "Birth date (YYYY-MM-DD, o dejar vacío):");
+    if (birthDate == null) birthDate = "";
+
+    // Campos necesarios para login
+    String username   = JOptionPane.showInputDialog(this, "Username:");
+    if (username == null || username.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "El username no puede estar vacío.");
+        return;
+    }
+
+    String password   = JOptionPane.showInputDialog(this, "Password:");
+    if (password == null || password.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "La contraseña no puede estar vacía.");
+        return;
+    }
+
+    // INSERT en la BD
+    String sql = "INSERT INTO users (" +
+                 "first_name, middle_name, last_name, phone, address, city, zip_code, " +
+                 "birth_date, username, password_hash, role" +
+                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setString(1,  firstName);
+        ps.setString(2,  middleName);
+        ps.setString(3,  lastName);
+        ps.setString(4,  phone);
+        ps.setString(5,  address);
+        ps.setString(6,  city);
+        ps.setString(7,  zipCode);
+
+        if (birthDate.isBlank()) {
+            ps.setNull(8, java.sql.Types.DATE);
+        } else {
+            ps.setString(8, birthDate);   // formato 'YYYY-MM-DD'
+        }
+
+        ps.setString(9,  username);
+        ps.setString(10, password);      // SIN hash, como tú quieres ahora
+        ps.setString(11, "USER");        // todos los que se añadan desde aquí serán USER
+
+        int rows = ps.executeUpdate();
+
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this, "Usuario agregado correctamente.");
+            loadUsers(); // refrescar tabla
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo agregar el usuario.");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this,
+                "Error al agregar usuario:\n" + e.getMessage());
+    }
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
