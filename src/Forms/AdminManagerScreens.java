@@ -10,6 +10,7 @@ package Forms;
  * @author julio
  */
 import Forms.EditUsers;
+import Forms.EditMovies;
 import javax.swing.JOptionPane; 
 
 public class AdminManagerScreens extends javax.swing.JFrame {
@@ -102,6 +103,9 @@ public class AdminManagerScreens extends javax.swing.JFrame {
 
     private void BtnMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMoviesActionPerformed
         // TODO add your handling code here:
+        EditMovies usersForm = new EditMovies();
+       usersForm.setVisible(true);
+
     }//GEN-LAST:event_BtnMoviesActionPerformed
 
     /**
