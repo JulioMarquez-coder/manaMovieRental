@@ -86,6 +86,11 @@ private void loadUsers() {
         });
 
         BtnEditar.setText("Editar");
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
 
         BtnEliminar.setText("Eliminar");
         BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -280,6 +285,100 @@ private void loadUsers() {
                 "Error al eliminar usuario:\n" + e.getMessage());
     }
     }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+        // TODO add your handling code here:
+        int fila = tblUsers.getSelectedRow();
+
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Selecciona un usuario de la tabla para editar.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) tblUsers.getModel();
+
+    // Tomar los valores actuales de la fila
+    Object idValue       = model.getValueAt(fila, 0); // ID
+    String firstName     = (String) model.getValueAt(fila, 1);
+    String middleName    = (String) model.getValueAt(fila, 2);
+    String lastName      = (String) model.getValueAt(fila, 3);
+    String phone         = (String) model.getValueAt(fila, 4);
+    String address       = (String) model.getValueAt(fila, 5);
+    String city          = (String) model.getValueAt(fila, 6);
+    String zipCode       = (String) model.getValueAt(fila, 7);
+    Object birthDateObj  = model.getValueAt(fila, 8);
+
+    String birthDateStr = (birthDateObj == null) ? "" : birthDateObj.toString();
+
+    int userId = Integer.parseInt(idValue.toString());
+
+    // Pedir nuevos valores (prellenados con lo actual)
+    firstName  = JOptionPane.showInputDialog(this, "First name:", firstName);
+    if (firstName == null) return;
+
+    middleName = JOptionPane.showInputDialog(this, "Middle name:", middleName);
+    if (middleName == null) middleName = "";
+
+    lastName   = JOptionPane.showInputDialog(this, "Last name:", lastName);
+    if (lastName == null) return;
+
+    phone      = JOptionPane.showInputDialog(this, "Phone:", phone);
+    if (phone == null) phone = "";
+
+    address    = JOptionPane.showInputDialog(this, "Address:", address);
+    if (address == null) address = "";
+
+    city       = JOptionPane.showInputDialog(this, "City:", city);
+    if (city == null) city = "";
+
+    zipCode    = JOptionPane.showInputDialog(this, "Zip code:", zipCode);
+    if (zipCode == null) zipCode = "";
+
+    birthDateStr = JOptionPane.showInputDialog(
+            this, "Birth date (YYYY-MM-DD, o vacío):", birthDateStr);
+    if (birthDateStr == null) birthDateStr = "";
+
+    String sql = "UPDATE users SET " +
+                 "first_name = ?, middle_name = ?, last_name = ?, " +
+                 "phone = ?, address = ?, city = ?, zip_code = ?, birth_date = ? " +
+                 "WHERE user_id = ?";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setString(1, firstName);
+        ps.setString(2, middleName);
+        ps.setString(3, lastName);
+        ps.setString(4, phone);
+        ps.setString(5, address);
+        ps.setString(6, city);
+        ps.setString(7, zipCode);
+
+        if (birthDateStr.isBlank()) {
+            ps.setNull(8, java.sql.Types.DATE);
+        } else {
+            ps.setString(8, birthDateStr);
+        }
+
+        ps.setInt(9, userId);
+
+        int rows = ps.executeUpdate();
+
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente.");
+            loadUsers(); // recargar la tabla
+        } else {
+            JOptionPane.showMessageDialog(this, "No se actualizó el usuario (verifica el ID).");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this,
+                "Error al actualizar usuario:\n" + e.getMessage());
+    }
+
+    }//GEN-LAST:event_BtnEditarActionPerformed
 
     /**
      * @param args the command line arguments
