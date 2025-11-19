@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import Forms.User_Registration1;
 
 
 /*
@@ -79,6 +80,11 @@ public class LoginForm extends javax.swing.JFrame {
         BtCancel.setText("Cancel");
 
         BtRegister.setText("Register");
+        BtRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtRegisterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,6 +200,13 @@ public class LoginForm extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
+
+    private void BtRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtRegisterActionPerformed
+        // TODO add your handling code here:
+       User_Registration1 usersForm = new User_Registration1();
+       usersForm.setVisible(true);
+
+    }//GEN-LAST:event_BtRegisterActionPerformed
 
     /**
      * @param args the command line arguments
