@@ -5,9 +5,6 @@ package Forms;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import java.awt.Image;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import database.DBConnection;
 import java.sql.Connection; 
@@ -316,16 +313,15 @@ public class User_Registration1 extends javax.swing.JFrame {
     String city        = textCity.getText().trim();
     String zipCode     = textZipCode.getText().trim();
     String username    = txtUsername.getText().trim();
-    String password    = TextPassword.getText().trim();     // tú lo estás guardando “normal”
+    String password    = TextPassword.getText().trim();     
 
-    // 2. Validaciones básicas
+    // 2. Campos Obligatorios
     if (username.isEmpty() || password.isEmpty()) {
         JOptionPane.showMessageDialog(this,
                 "Username y Password son obligatorios.");
         return;
     }
 
-    // (si quieres, puedes obligar nombre y apellido también)
     if (firstName.isEmpty() || lastName.isEmpty()) {
         JOptionPane.showMessageDialog(this,
                 "First Name y Last Name no pueden estar vacíos.");
@@ -349,7 +345,7 @@ public class User_Registration1 extends javax.swing.JFrame {
         ps.setString(6,  city);
         ps.setString(7,  zipCode);
 
-        // birth_date (DATE). Si está vacío, mandamos NULL
+        // birth_date (DATE). Si está vacío, colocamos NULL
         if (birthDate.isBlank()) {
             ps.setNull(8, java.sql.Types.DATE);
         } else {
@@ -358,15 +354,15 @@ public class User_Registration1 extends javax.swing.JFrame {
         }
 
         ps.setString(9,  username);
-        ps.setString(10, password);   // SIN hash, como ya estás usando en el login
-        ps.setString(11, "USER");     // los registrados desde aquí son usuarios normales
+        ps.setString(10, password);   
+        ps.setString(11, "USER");     // los registrados son usuarios normales
 
         int rows = ps.executeUpdate();
 
         if (rows > 0) {
             JOptionPane.showMessageDialog(this,
                     "Usuario registrado correctamente.\nAhora puedes hacer login.");
-            // Opcional: limpiar campos
+            // limpiar campos
             TextName.setText("");
             TextMiddleName.setText("");
             TextLastName.setText("");
@@ -378,7 +374,7 @@ public class User_Registration1 extends javax.swing.JFrame {
             txtUsername.setText("");
             TextPassword.setText("");
 
-            // Volver al login si quieres:
+            // Volver al login
             new LoginForm().setVisible(true);
             this.dispose();
         } else {
