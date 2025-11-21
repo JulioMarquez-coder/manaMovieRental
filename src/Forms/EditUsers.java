@@ -213,7 +213,7 @@ private void loadUsers() {
         }
 
         ps.setString(9,  username);
-        ps.setString(10, password);      // SIN hash, como tú quieres ahora
+        ps.setString(10, password);      
         ps.setString(11, "USER");        // todos los que se añadan desde aquí serán USER
 
         int rows = ps.executeUpdate();
