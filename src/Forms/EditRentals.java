@@ -29,7 +29,7 @@ public class EditRentals extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        Rental_Table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -37,7 +37,7 @@ public class EditRentals extends javax.swing.JFrame {
         setTitle("Rentals");
         setName("rentals_frame"); // NOI18N
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        Rental_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -51,11 +51,11 @@ public class EditRentals extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Movie ID", "Movie Name", "Customer ID", "Customer Name", "Rental Date"
+                "Movie ID", "Movie Name", "Customer ID", "Customer Name", "Rented Date"
             }
         ));
-        jTable2.setName("rental_table"); // NOI18N
-        jScrollPane2.setViewportView(jTable2);
+        Rental_Table.setName("rental_table"); // NOI18N
+        jScrollPane2.setViewportView(Rental_Table);
 
         jButton1.setText("Return Movie");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -125,9 +125,9 @@ public class EditRentals extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Rental_Table;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }
