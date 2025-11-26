@@ -117,11 +117,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtCancelActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="BtRegister">
       <Properties>
         <Property name="text" type="java.lang.String" value="Register"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtRegisterActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

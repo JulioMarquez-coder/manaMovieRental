@@ -77,8 +77,18 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         BtCancel.setText("Cancel");
+        BtCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtCancelActionPerformed(evt);
+            }
+        });
 
         BtRegister.setText("Register");
+        BtRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtRegisterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,6 +204,17 @@ public class LoginForm extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
+
+    private void BtRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtRegisterActionPerformed
+        // TODO add your handling code here:
+        UserRegistration usersForm = new UserRegistration();
+        usersForm.setVisible(true);
+    }//GEN-LAST:event_BtRegisterActionPerformed
+
+    private void BtCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtCancelActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false); 
+    }//GEN-LAST:event_BtCancelActionPerformed
 
     /**
      * @param args the command line arguments

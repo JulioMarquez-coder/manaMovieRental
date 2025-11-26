@@ -30,8 +30,8 @@ public class EditRentals extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         Rental_Table = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        RentalReturn = new javax.swing.JButton();
+        RentalAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rentals");
@@ -57,14 +57,21 @@ public class EditRentals extends javax.swing.JFrame {
         Rental_Table.setName("rental_table"); // NOI18N
         jScrollPane2.setViewportView(Rental_Table);
 
-        jButton1.setText("Return Movie");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        RentalReturn.setText("Return Movie");
+        RentalReturn.setName("RtrnMvie_button"); // NOI18N
+        RentalReturn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                RentalReturnActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Add Rental");
+        RentalAdd.setText("Add Rental");
+        RentalAdd.setName("AddRntl_button"); // NOI18N
+        RentalAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RentalAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,9 +81,9 @@ public class EditRentals extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(RentalReturn)
                         .addGap(33, 33, 33)
-                        .addComponent(jButton2))
+                        .addComponent(RentalAdd))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
@@ -87,17 +94,25 @@ public class EditRentals extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(RentalReturn)
+                    .addComponent(RentalAdd))
                 .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void RentalReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalReturnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        RentalReturn usersForm = new RentalReturn();
+        usersForm.setVisible(true);
+    }//GEN-LAST:event_RentalReturnActionPerformed
+
+    private void RentalAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalAddActionPerformed
+        // TODO add your handling code here:
+        NewRentalMenu usersForm = new NewRentalMenu();
+        usersForm.setVisible(true);
+    }//GEN-LAST:event_RentalAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,9 +140,9 @@ public class EditRentals extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton RentalAdd;
+    private javax.swing.JButton RentalReturn;
     private javax.swing.JTable Rental_Table;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
