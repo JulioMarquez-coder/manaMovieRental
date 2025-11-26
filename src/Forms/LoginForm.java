@@ -77,6 +77,11 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         BtCancel.setText("Cancel");
+        BtCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtCancelActionPerformed(evt);
+            }
+        });
 
         BtRegister.setText("Register");
         BtRegister.addActionListener(new java.awt.event.ActionListener() {
@@ -202,10 +207,14 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void BtRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtRegisterActionPerformed
         // TODO add your handling code here:
-       User_Registration1 usersForm = new User_Registration1();
-       usersForm.setVisible(true);
-
+        UserRegistration usersForm = new UserRegistration();
+        usersForm.setVisible(true);
     }//GEN-LAST:event_BtRegisterActionPerformed
+
+    private void BtCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtCancelActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false); 
+    }//GEN-LAST:event_BtCancelActionPerformed
 
     /**
      * @param args the command line arguments

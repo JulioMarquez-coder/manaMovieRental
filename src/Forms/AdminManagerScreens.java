@@ -64,6 +64,11 @@ public class AdminManagerScreens extends javax.swing.JFrame {
         BtnRentals.setText("Rentals");
         BtnRentals.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnRentals.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnRentals.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnRentalsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,6 +112,12 @@ public class AdminManagerScreens extends javax.swing.JFrame {
        usersForm.setVisible(true);
 
     }//GEN-LAST:event_BtnMoviesActionPerformed
+
+    private void BtnRentalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRentalsActionPerformed
+        // TODO add your handling code here:
+        EditRentals usersForm = new EditRentals();
+        usersForm.setVisible(true);
+    }//GEN-LAST:event_BtnRentalsActionPerformed
 
     /**
      * @param args the command line arguments
