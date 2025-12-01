@@ -95,24 +95,26 @@ public class LoginForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addGap(90, 90, 90)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(LabelUser)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
                         .addComponent(BtLogin)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(BtCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BtRegister))
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelUser)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BtRegister)))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -166,8 +168,8 @@ public class LoginForm extends javax.swing.JFrame {
     // 🔽 De aquí para abajo, lo de la base de datos (cuando ya esté funcionando)
     try (Connection cn = DBConnection.getConnection()) {
 
-        String sql = "SELECT role FROM users " +
-                     "WHERE username = ? AND password_hash = ?";
+        String sql = "SELECT user_id, role FROM users " +
+             "WHERE username = ? AND password_hash = ?";
 
         PreparedStatement ps = cn.prepareStatement(sql);
         ps.setString(1, username);
@@ -175,21 +177,22 @@ public class LoginForm extends javax.swing.JFrame {
 
         ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {
-            String role = rs.getString("role");
+if (rs.next()) {
+    int userId = rs.getInt("user_id");
+    String role = rs.getString("role");
 
-            if ("ADMIN".equalsIgnoreCase(role)) {
-                new AdminManagerScreens().setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Login correcto como USER (luego abrimos la pantalla de usuario).");
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Usuario o contraseña incorrectos.");
-        }
+    if ("ADMIN".equalsIgnoreCase(role)) {
+        new AdminManagerScreens().setVisible(true);
+        this.dispose();
+    } else {
+        // 👇 open user movie screen
+        new MovieBrowser(userId).setVisible(true);
+        this.dispose();
+    }
+} else {
+    JOptionPane.showMessageDialog(this,
+            "Usuario o contraseña incorrectos.");
+}
 
     } catch (Exception e) {
         e.printStackTrace();
