@@ -41,7 +41,7 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         BtLogin = new javax.swing.JButton();
-        BtCancel = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
         BtRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,10 +76,10 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        BtCancel.setText("Cancel");
-        BtCancel.addActionListener(new java.awt.event.ActionListener() {
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtCancelActionPerformed(evt);
+                btnExitActionPerformed(evt);
             }
         });
 
@@ -112,7 +112,7 @@ public class LoginForm extends javax.swing.JFrame {
                         .addGap(79, 79, 79)
                         .addComponent(BtLogin)
                         .addGap(18, 18, 18)
-                        .addComponent(BtCancel)
+                        .addComponent(btnExit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(BtRegister)))
                 .addContainerGap(75, Short.MAX_VALUE))
@@ -133,7 +133,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtLogin)
-                    .addComponent(BtCancel)
+                    .addComponent(btnExit)
                     .addComponent(BtRegister))
                 .addGap(46, 46, 46))
         );
@@ -214,10 +214,20 @@ if (rs.next()) {
         usersForm.setVisible(true);
     }//GEN-LAST:event_BtRegisterActionPerformed
 
-    private void BtCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtCancelActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false); 
-    }//GEN-LAST:event_BtCancelActionPerformed
+        int choice = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to exit the application?",
+            "Exit Confirmation",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (choice == JOptionPane.YES_OPTION) {
+        System.exit(0); 
+    }
+        
+    }//GEN-LAST:event_btnExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,10 +255,10 @@ if (rs.next()) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtCancel;
     private javax.swing.JButton BtLogin;
     private javax.swing.JButton BtRegister;
     private javax.swing.JLabel LabelUser;
+    private javax.swing.JButton btnExit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField txtPassword;

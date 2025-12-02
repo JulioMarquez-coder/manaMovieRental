@@ -128,72 +128,84 @@ public class RentalReturn extends javax.swing.JFrame {
     private void OkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OkButtonActionPerformed
         // TODO add your handling code here:     
         String text = jTextField1.getText().trim();
-        if (text.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a movie ID.");
-            return;
-        }
+    if (text.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a movie ID.");
+        return;
+    }
 
-        int movieId;
-        try {
-            movieId = Integer.parseInt(text);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Movie ID must be a number.");
-            return;
-        }
+    int movieId;
+    try {
+        movieId = Integer.parseInt(text);
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Movie ID must be a number.");
+        return;
+    }
 
-        if (currentUserId <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No logged-in user. Open this screen from the main app.");
-            return;
-        }
-        
-        String format = (String) cmbFormat.getSelectedItem();
+    if (currentUserId <= 0) {
+        JOptionPane.showMessageDialog(this,
+                "No logged-in user. Open this screen from the main app.");
+        return;
+    }
 
-        String sql =
-            "SELECT r.reservation_id, r.movie_id, r.format, m.title " +
+    // If you have a combo box for format (DVD / BLURAY), keep this:
+    String format = (cmbFormat != null)
+            ? (String) cmbFormat.getSelectedItem()
+            : null;
+
+    String sql =
+        "SELECT r.reservation_id, r.movie_id, r.format, m.title " +
         "FROM reservations r " +
         "JOIN movies m ON r.movie_id = m.movie_id " +
-        "WHERE r.user_id = ? " +
+        "WHERE r.user_id = ? " +          // 👈 only this user’s rentals
         "  AND r.movie_id = ? " +
-        "  AND r.format = ? " +              
+        (format != null ? "  AND r.format = ? " : "") +
         "  AND r.status = 'PENDING' " +
+        "ORDER BY r.reservation_date DESC " +
         "LIMIT 1";
 
-        try (Connection cn = DBConnection.getConnection();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setInt(1, currentUserId);
-            ps.setInt(2, movieId);
-            ps.setString(3, format);
+        int idx = 1;
+        ps.setInt(idx++, currentUserId);    // 👈 user filter
+        ps.setInt(idx++, movieId);
+        if (format != null) {
+            ps.setString(idx++, format);
+        }
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    JOptionPane.showMessageDialog(this,
-                            "No active rental found for that movie and this user.");
-                    return;
-                }
-
-                int reservationId = rs.getInt("reservation_id");
-                String title = rs.getString("title");
-
-                ReturnConfirmation rc =
-                        new ReturnConfirmation(reservationId, movieId,
-                                               currentUserId, format, title);
-                rc.setLocationRelativeTo(this);
-                rc.setVisible(true);
-                this.dispose();
+        try (ResultSet rs = ps.executeQuery()) {
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(this,
+                        "No active rental found for that movie under this user.");
+                return;
             }
 
-        } catch (Exception e) {
-            logger.log(java.util.logging.Level.SEVERE, "Error looking up rental", e);
-            JOptionPane.showMessageDialog(this,
-                    "Error searching rental: " + e.getMessage());
+            int reservationId = rs.getInt("reservation_id");
+            String dbFormat   = rs.getString("format");
+            String title      = rs.getString("title");
+
+            ReturnConfirmation rc =
+                    new ReturnConfirmation(reservationId,
+                                           movieId,
+                                           currentUserId,
+                                           dbFormat,
+                                           title);
+            rc.setLocationRelativeTo(this);
+            rc.setVisible(true);
+            this.dispose();
         }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error looking up rental", e);
+        JOptionPane.showMessageDialog(this,
+                "Error searching rental: " + e.getMessage());
+    }
                                           
     }//GEN-LAST:event_OkButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         // TODO add your handling code here:
+        new MovieBrowser().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 

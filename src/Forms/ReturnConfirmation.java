@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author leandra
@@ -22,26 +23,77 @@ public class ReturnConfirmation extends javax.swing.JFrame {
     private int userId;
     private String format;
     private String movieTitle;
+    private final int currentUserId;
+
+private void returnMovie(int reservationId, int movieId, int userId, String format) {
+
+    Connection cn = null;
+    try {
+        cn = DBConnection.getConnection();
+        cn.setAutoCommit(false);
+
+        // 1) Make sure this rental belongs to this user
+        String sqlUpdateRes =
+            "UPDATE reservations SET status='RETURNED', return_actual_at=NOW() " +
+            "WHERE reservation_id=? AND user_id=?";
+        try (PreparedStatement ps1 = cn.prepareStatement(sqlUpdateRes)) {
+            ps1.setInt(1, reservationId);
+            ps1.setInt(2, userId);
+
+            int updated = ps1.executeUpdate();
+            if (updated == 0) {
+                cn.rollback();
+                JOptionPane.showMessageDialog(this,
+                    "You cannot return this rental. It does not belong to your account.");
+                return;
+            }
+        }
+
+        // 2) Free the correct physical format
+        String column = format.equalsIgnoreCase("DVD")
+                        ? "available_dvd"
+                        : "available_bluray";
+
+        String sqlUpdateMovie = 
+            "UPDATE movies SET " + column + " = 1 WHERE movie_id=?";
+        try (PreparedStatement ps2 = cn.prepareStatement(sqlUpdateMovie)) {
+            ps2.setInt(1, movieId);
+            ps2.executeUpdate();
+        }
+
+        cn.commit();
+        JOptionPane.showMessageDialog(this, "Movie returned successfully!");
+
+    } catch (Exception e) {
+        try { if (cn != null) cn.rollback(); } catch (Exception ignore) {}
+        JOptionPane.showMessageDialog(this, "Error completing return: " + e.getMessage());
+    } finally {
+        try { if (cn != null) cn.setAutoCommit(true); } catch (Exception ignore) {}
+    }
+}
     /**
      * Creates new form Return_Confirmation
      */
     public ReturnConfirmation() {
+        this(-1, -1, -1, "", "");
         initComponents();
     }
     
-    public ReturnConfirmation(int reservationId,
-                          int movieId,
-                          int userId,
-                          String format,
-                          String movieTitle) {
+public ReturnConfirmation(int reservationId, int movieId,
+                          int currentUserId, String format, String movieTitle) {
     this.reservationId = reservationId;
     this.movieId = movieId;
-    this.userId = userId;
+    this.currentUserId = currentUserId;
     this.format = format;
     this.movieTitle = movieTitle;
+
     initComponents();
-    loadReturnDetails();
+
+    // Change lblInfo to your real label name
+    jLabel1.setText("Return " + movieTitle + " (" + format + ")?");
 }
+
+
     private void loadReturnDetails() {
     // These labels are guesses based on your form:
     // jLabel8, 10, 11, 12, 14, 13, 15 are on the right side.
@@ -148,11 +200,11 @@ public class ReturnConfirmation extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(CompleteReturnButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CancelReturnButton)
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(60, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -219,68 +271,20 @@ public class ReturnConfirmation extends javax.swing.JFrame {
     private void CompleteReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CompleteReturnButtonActionPerformed
         // TODO add your handling code here:
         /* removes entire row from user rental tab, research database deletion via java code*/
-        Connection cn = null;
-    try {
-        cn = DBConnection.getConnection();
-        cn.setAutoCommit(false);
+        returnMovie(reservationId, movieId, currentUserId, format);
 
-        // 1) Mark reservation as returned
-        String sqlRes =
-                "UPDATE reservations " +
-                "SET status = 'RETURNED', return_actual_at = NOW() " +
-                "WHERE reservation_id = ? AND user_id = ?";
-        try (PreparedStatement psRes = cn.prepareStatement(sqlRes)) {
-            psRes.setInt(1, reservationId);
-            psRes.setInt(2, userId);
-            int updated = psRes.executeUpdate();
-            if (updated == 0) {
-                cn.rollback();
-                JOptionPane.showMessageDialog(this,
-                        "No matching active reservation found.");
-                return;
-            }
-        }
+    // After success → return to movie browser
+    MovieBrowser mb = new MovieBrowser(currentUserId);
+    mb.setLocationRelativeTo(this);
+    mb.setVisible(true);
 
-        // 2) Make the specific format available again
-        String column = "DVD".equalsIgnoreCase(format)
-                ? "available_dvd"
-                : "available_bluray";
-
-        String sqlMovie =
-                "UPDATE movies SET " + column + " = 1 WHERE movie_id = ?";
-        try (PreparedStatement psMovie = cn.prepareStatement(sqlMovie)) {
-            psMovie.setInt(1, movieId);
-            psMovie.executeUpdate();
-        }
-
-        cn.commit();
-        
-        JOptionPane.showMessageDialog(this, "Movie returned successfully.");
-        
-        MovieBrowser browser = new MovieBrowser(userId);
-        browser.setLocationRelativeTo(null);   // center on screen (optional)
-        browser.setVisible(true);
-
-        
-        this.dispose();
-
-    } catch (Exception e) {
-        if (cn != null) {
-            try { cn.rollback(); } catch (Exception ex) { /* ignore */ }
-        }
-        logger.log(java.util.logging.Level.SEVERE, "Error completing return", e);
-        JOptionPane.showMessageDialog(this,
-                "Error completing return: " + e.getMessage());
-    } finally {
-        if (cn != null) {
-            try { cn.setAutoCommit(true); } catch (Exception ex) { /* ignore */ }
-        }
-    }
+    this.dispose();
     }//GEN-LAST:event_CompleteReturnButtonActionPerformed
 
     private void CancelReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelReturnButtonActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        new MovieBrowser().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_CancelReturnButtonActionPerformed
 
     /**

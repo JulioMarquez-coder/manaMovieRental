@@ -4,6 +4,12 @@
  */
 package Forms;
 
+import database.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author julio
@@ -17,7 +23,45 @@ public class EditMovies extends javax.swing.JFrame {
      */
     public EditMovies() {
         initComponents();
+        loadMovies();
     }
+    
+    private void loadMovies() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // clear existing rows
+
+    String sql =
+        "SELECT movie_id, title, release_date, genre, " +
+        "       running_time_minutes, rate, poster_url, " +
+        "       director, writers, cast " +
+        "FROM movies";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Object[] row = new Object[] {
+                rs.getInt("movie_id"),               // Id
+                rs.getString("title"),               // Title
+                rs.getDate("release_date"),          // Release Date
+                rs.getString("genre"),               // Genre
+                rs.getInt("running_time_minutes"),   // Run Time
+                rs.getString("rate"),                // Rated
+                rs.getString("poster_url"),          // Phote (URL)
+                rs.getString("director"),            // Director
+                rs.getString("writers"),             // Writers
+                rs.getString("cast")                 // Cast
+            };
+            model.addRow(row);
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error loading movies", e);
+        JOptionPane.showMessageDialog(this,
+                "Error loading movies: " + e.getMessage());
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,6 +77,7 @@ public class EditMovies extends javax.swing.JFrame {
         BtnAdd = new javax.swing.JButton();
         BtnEdit = new javax.swing.JButton();
         BtnDelete = new javax.swing.JButton();
+        btnAdminMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,28 +95,51 @@ public class EditMovies extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         BtnAdd.setText("Add");
+        BtnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAddActionPerformed(evt);
+            }
+        });
 
         BtnEdit.setText("Edit");
+        BtnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditActionPerformed(evt);
+            }
+        });
 
         BtnDelete.setText("Delete");
+        BtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnAdminMenu.setText("Admin Menu");
+        btnAdminMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminMenuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(BtnAdd)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnEdit)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnDelete))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(BtnAdd)
+                .addGap(18, 18, 18)
+                .addComponent(BtnEdit)
+                .addGap(18, 18, 18)
+                .addComponent(BtnDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdminMenu)
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,13 +149,341 @@ public class EditMovies extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnAdd)
                     .addComponent(BtnEdit)
-                    .addComponent(BtnDelete))
+                    .addComponent(BtnDelete)
+                    .addComponent(btnAdminMenu))
                 .addGap(0, 37, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminMenuActionPerformed
+        // TODO add your handling code here:
+        new AdminManagerScreens().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAdminMenuActionPerformed
+
+    private void BtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddActionPerformed
+        // TODO add your handling code here:
+         String title = JOptionPane.showInputDialog(this, "Title:");
+    if (title == null || title.trim().isEmpty()) {
+        return; // cancelled or empty
+    }
+
+    String director   = JOptionPane.showInputDialog(this, "Director:");
+    String writers    = JOptionPane.showInputDialog(this, "Writers:");
+    String genre      = JOptionPane.showInputDialog(this, "Genre:");
+    String rate       = JOptionPane.showInputDialog(this, "Rated (e.g. PG-13):");
+    String runtimeStr = JOptionPane.showInputDialog(this, "Runtime in minutes:");
+    String releaseStr = JOptionPane.showInputDialog(this, "Release date (YYYY-MM-DD):");
+    String cast       = JOptionPane.showInputDialog(this, "Cast:");
+    String posterUrl  = JOptionPane.showInputDialog(this, "Poster URL (image link):");
+
+    // 2. Convert runtime
+    Integer runtime = null;
+    if (runtimeStr != null && !runtimeStr.isBlank()) {
+        try {
+            runtime = Integer.parseInt(runtimeStr.trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Runtime must be a number.");
+            return;
+        }
+    }
+
+    // 3. Convert date
+    java.sql.Date releaseDate = null;
+    if (releaseStr != null && !releaseStr.isBlank()) {
+        try {
+            releaseDate = java.sql.Date.valueOf(releaseStr.trim()); // YYYY-MM-DD
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid date format. Use YYYY-MM-DD.");
+            return;
+        }
+    }
+
+    String sql = "INSERT INTO movies " +
+                 "(title, director, writers, release_date, " +
+                 " running_time_minutes, rate, genre, cast, poster_url) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setString(1, title);
+        ps.setString(2, director);
+        ps.setString(3, writers);
+
+        if (releaseDate != null) {
+            ps.setDate(4, releaseDate);
+        } else {
+            ps.setNull(4, java.sql.Types.DATE);
+        }
+
+        if (runtime != null) {
+            ps.setInt(5, runtime);
+        } else {
+            ps.setNull(5, java.sql.Types.SMALLINT);
+        }
+
+        ps.setString(6, rate);
+        ps.setString(7, genre);
+        ps.setString(8, cast);
+        ps.setString(9, posterUrl);
+
+        ps.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Movie added successfully.");
+
+        // Refresh table
+        loadMovies();
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error adding movie", e);
+        JOptionPane.showMessageDialog(this,
+                "Error adding movie: " + e.getMessage());
+    }
+    }//GEN-LAST:event_BtnAddActionPerformed
+
+    private void BtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditActionPerformed
+        // TODO add your handling code here:
+       int row = jTable1.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a movie to edit.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+    // Read current values from the table
+    Object idObj       = model.getValueAt(row, 0);
+    String title       = String.valueOf(model.getValueAt(row, 1));
+    String releaseDate = String.valueOf(model.getValueAt(row, 2));
+    String genre       = String.valueOf(model.getValueAt(row, 3));
+    String runTime     = String.valueOf(model.getValueAt(row, 4));
+    String rated       = String.valueOf(model.getValueAt(row, 5));
+    String photo       = String.valueOf(model.getValueAt(row, 6));
+    String director    = String.valueOf(model.getValueAt(row, 7));
+    String writers     = String.valueOf(model.getValueAt(row, 8));
+    String cast        = String.valueOf(model.getValueAt(row, 9));
+
+    if (idObj == null) {
+        JOptionPane.showMessageDialog(this,
+                "Selected row has no ID. Cannot edit.");
+        return;
+    }
+
+    int movieId;
+    try {
+        movieId = Integer.parseInt(idObj.toString());
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Invalid movie ID in the table.");
+        return;
+    }
+
+    // Create input fields pre-filled with current values
+    javax.swing.JTextField txtTitle       = new javax.swing.JTextField(title);
+    javax.swing.JTextField txtReleaseDate = new javax.swing.JTextField(releaseDate);
+    javax.swing.JTextField txtGenre       = new javax.swing.JTextField(genre);
+    javax.swing.JTextField txtRunTime     = new javax.swing.JTextField(runTime);
+    javax.swing.JTextField txtRated       = new javax.swing.JTextField(rated);
+    javax.swing.JTextField txtPhoto       = new javax.swing.JTextField(photo);
+    javax.swing.JTextField txtDirector    = new javax.swing.JTextField(director);
+    javax.swing.JTextField txtWriters     = new javax.swing.JTextField(writers);
+    javax.swing.JTextField txtCast        = new javax.swing.JTextField(cast);
+
+    // Panel for the dialog
+    javax.swing.JPanel panel = new javax.swing.JPanel();
+    panel.setLayout(new java.awt.GridLayout(0, 2, 5, 5));
+    panel.add(new javax.swing.JLabel("Title:"));
+    panel.add(txtTitle);
+    panel.add(new javax.swing.JLabel("Release Date (YYYY-MM-DD):"));
+    panel.add(txtReleaseDate);
+    panel.add(new javax.swing.JLabel("Genre:"));
+    panel.add(txtGenre);
+    panel.add(new javax.swing.JLabel("Run Time (minutes):"));
+    panel.add(txtRunTime);
+    panel.add(new javax.swing.JLabel("Rated:"));
+    panel.add(txtRated);
+    panel.add(new javax.swing.JLabel("Poster URL:"));
+    panel.add(txtPhoto);
+    panel.add(new javax.swing.JLabel("Director:"));
+    panel.add(txtDirector);
+    panel.add(new javax.swing.JLabel("Writers:"));
+    panel.add(txtWriters);
+    panel.add(new javax.swing.JLabel("Cast:"));
+    panel.add(txtCast);
+
+    int result = JOptionPane.showConfirmDialog(
+            this,
+            panel,
+            "Edit Movie",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE
+    );
+
+    if (result != JOptionPane.OK_OPTION) {
+        return; // user cancelled
+    }
+
+    // Get edited values
+    String newTitle       = txtTitle.getText().trim();
+    String newReleaseDate = txtReleaseDate.getText().trim();
+    String newGenre       = txtGenre.getText().trim();
+    String newRunTimeStr  = txtRunTime.getText().trim();
+    String newRated       = txtRated.getText().trim();
+    String newPhoto       = txtPhoto.getText().trim();
+    String newDirector    = txtDirector.getText().trim();
+    String newWriters     = txtWriters.getText().trim();
+    String newCast        = txtCast.getText().trim();
+
+    int newRunTime;
+    try {
+        newRunTime = Integer.parseInt(newRunTimeStr);
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Run Time must be a number.");
+        return;
+    }
+
+    // Update in database
+    String sql =
+        "UPDATE movies SET " +
+        "title = ?, " +
+        "release_date = ?, " +
+        "genre = ?, " +
+        "running_time_minutes = ?, " +
+        "rate = ?, " +
+        "poster_url = ?, " +
+        "director = ?, " +
+        "writers = ?, " +
+        "cast = ? " +
+        "WHERE movie_id = ?";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setString(1, newTitle);
+        ps.setString(2, newReleaseDate);   // assumes valid date string
+        ps.setString(3, newGenre);
+        ps.setInt(4, newRunTime);
+        ps.setString(5, newRated);
+        ps.setString(6, newPhoto);
+        ps.setString(7, newDirector);
+        ps.setString(8, newWriters);
+        ps.setString(9, newCast);
+        ps.setInt(10, movieId);
+
+        int updated = ps.executeUpdate();
+        if (updated > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Movie updated successfully.");
+            loadMovies();  // refresh the table with new values
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No movie was updated. Check movie ID.");
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error updating movie", e);
+        JOptionPane.showMessageDialog(this,
+                "Error updating movie: " + e.getMessage());
+    }
+    }//GEN-LAST:event_BtnEditActionPerformed
+
+    private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
+        // TODO add your handling code here:
+        int row = jTable1.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a movie to delete.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+    Object idObj = model.getValueAt(row, 0); // column 0 = movie_id
+    if (idObj == null) {
+        JOptionPane.showMessageDialog(this,
+                "Selected row has no ID. Cannot delete.");
+        return;
+    }
+
+    int movieId;
+    try {
+        movieId = Integer.parseInt(idObj.toString());
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Invalid movie ID in the table.");
+        return;
+    }
+
+    // Confirm with admin
+    int choice = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to delete movie ID " + movieId + "?",
+            "Confirm delete",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (choice != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try (Connection cn = DBConnection.getConnection()) {
+
+        // 1) Check if movie has active rentals
+        String checkSql =
+            "SELECT COUNT(*) " +
+            "FROM reservations " +
+            "WHERE movie_id = ? AND status = 'PENDING'";
+
+        try (PreparedStatement psCheck = cn.prepareStatement(checkSql)) {
+            psCheck.setInt(1, movieId);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "This movie has active rentals and cannot be deleted.");
+                    return;
+                }
+            }
+        }
+
+        // 2) Delete reservations history for this movie (optional, if allowed)
+        String deleteReservationsSql =
+            "DELETE FROM reservations WHERE movie_id = ?";
+        try (PreparedStatement psDelRes = cn.prepareStatement(deleteReservationsSql)) {
+            psDelRes.setInt(1, movieId);
+            psDelRes.executeUpdate();
+        }
+
+        // 3) Delete movie from movies table
+        String deleteMovieSql = "DELETE FROM movies WHERE movie_id = ?";
+        try (PreparedStatement psDelMov = cn.prepareStatement(deleteMovieSql)) {
+            psDelMov.setInt(1, movieId);
+            int deleted = psDelMov.executeUpdate();
+
+            if (deleted > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Movie deleted successfully.");
+                loadMovies(); // refresh table
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No movie deleted. Check movie ID.");
+            }
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error deleting movie", e);
+        JOptionPane.showMessageDialog(this,
+                "Error deleting movie: " + e.getMessage());
+    }
+    }//GEN-LAST:event_BtnDeleteActionPerformed
+
+    private String safeString(Object value) {
+    return value == null ? "" : value.toString().trim();
+}
     /**
      * @param args the command line arguments
      */
@@ -117,6 +513,7 @@ public class EditMovies extends javax.swing.JFrame {
     private javax.swing.JButton BtnAdd;
     private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnEdit;
+    private javax.swing.JButton btnAdminMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

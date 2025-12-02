@@ -32,6 +32,7 @@ public class EditRentals extends javax.swing.JFrame {
         Rental_Table = new javax.swing.JTable();
         RentalReturn = new javax.swing.JButton();
         RentalAdd = new javax.swing.JButton();
+        btnAdminMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rentals");
@@ -73,6 +74,13 @@ public class EditRentals extends javax.swing.JFrame {
             }
         });
 
+        btnAdminMenu.setText("Admin Menu");
+        btnAdminMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,11 +89,15 @@ public class EditRentals extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(31, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(RentalReturn)
                         .addGap(33, 33, 33)
-                        .addComponent(RentalAdd))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(RentalAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAdminMenu)
+                        .addGap(55, 55, 55))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +107,8 @@ public class EditRentals extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RentalReturn)
-                    .addComponent(RentalAdd))
+                    .addComponent(RentalAdd)
+                    .addComponent(btnAdminMenu))
                 .addGap(24, 24, 24))
         );
 
@@ -113,6 +126,12 @@ public class EditRentals extends javax.swing.JFrame {
         NewRentalMenu usersForm = new NewRentalMenu();
         usersForm.setVisible(true);
     }//GEN-LAST:event_RentalAddActionPerformed
+
+    private void btnAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminMenuActionPerformed
+        // TODO add your handling code here:
+        new AdminManagerScreens().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAdminMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,6 +162,7 @@ public class EditRentals extends javax.swing.JFrame {
     private javax.swing.JButton RentalAdd;
     private javax.swing.JButton RentalReturn;
     private javax.swing.JTable Rental_Table;
+    private javax.swing.JButton btnAdminMenu;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

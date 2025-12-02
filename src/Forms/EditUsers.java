@@ -75,6 +75,7 @@ private void loadUsers() {
         BtnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsers = new javax.swing.JTable();
+        btnAdminMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,23 +115,31 @@ private void loadUsers() {
         ));
         jScrollPane1.setViewportView(tblUsers);
 
+        btnAdminMenu.setText("Admin Menu");
+        btnAdminMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(BtnAgregar)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnEditar)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnEliminar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(29, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(BtnAgregar)
+                .addGap(18, 18, 18)
+                .addComponent(BtnEditar)
+                .addGap(18, 18, 18)
+                .addComponent(BtnEliminar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdminMenu)
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,7 +150,8 @@ private void loadUsers() {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnAgregar)
                     .addComponent(BtnEditar)
-                    .addComponent(BtnEliminar))
+                    .addComponent(BtnEliminar)
+                    .addComponent(btnAdminMenu))
                 .addGap(22, 22, 22))
         );
 
@@ -380,6 +390,12 @@ private void loadUsers() {
 
     }//GEN-LAST:event_BtnEditarActionPerformed
 
+    private void btnAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminMenuActionPerformed
+        // TODO add your handling code here:
+        new AdminManagerScreens().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAdminMenuActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,6 +425,7 @@ private void loadUsers() {
     private javax.swing.JButton BtnAgregar;
     private javax.swing.JButton BtnEditar;
     private javax.swing.JButton BtnEliminar;
+    private javax.swing.JButton btnAdminMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblUsers;
     // End of variables declaration//GEN-END:variables
