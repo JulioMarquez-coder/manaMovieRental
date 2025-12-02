@@ -119,7 +119,9 @@ public class MovieBrowser extends javax.swing.JFrame {
         ltPanel.setLayout(ltPanelLayout);
         ltPanelLayout.setHorizontalGroup(
             ltPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+            .addGroup(ltPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         ltPanelLayout.setVerticalGroup(
             ltPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,7 +161,7 @@ public class MovieBrowser extends javax.swing.JFrame {
 
         lblRated.setText("Rated:");
 
-        lblRuntime.setText("Runtime:");
+        lblRuntime.setText("Runtime: (Minutes)");
 
         lblReleaseDate.setText("Release Date:");
 
@@ -248,7 +250,7 @@ public class MovieBrowser extends javax.swing.JFrame {
             .addGroup(rtPanelLayout.createSequentialGroup()
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rtPanelLayout.createSequentialGroup()
-                        .addContainerGap(46, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblCurrentUser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -305,7 +307,7 @@ public class MovieBrowser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1068, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

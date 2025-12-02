@@ -210,8 +210,8 @@ if (rs.next()) {
 
     private void BtRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtRegisterActionPerformed
         // TODO add your handling code here:
-        UserRegistration usersForm = new UserRegistration();
-        usersForm.setVisible(true);
+        new UserRegistration().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtRegisterActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed

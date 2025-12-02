@@ -7,7 +7,11 @@ package Forms;
 
 import java.util.*;
 import java.lang.*;
-
+import database.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 /**
  *
  * @author leandra
@@ -21,6 +25,7 @@ public class NewRentalMenu extends javax.swing.JFrame {
      */
     public NewRentalMenu() {
         initComponents();
+        addFieldValidation();
     }
 
     /**
@@ -33,15 +38,17 @@ public class NewRentalMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblMovieID = new javax.swing.JLabel();
+        lblCustID = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        OkButton = new javax.swing.JButton();
-        CancelButton = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        btnCreateRental = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        txtFieldMovieID = new javax.swing.JTextField();
+        txtFieldCustID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        cmbFormat = new javax.swing.JComboBox<>();
+        lblFormat = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -49,32 +56,38 @@ public class NewRentalMenu extends javax.swing.JFrame {
         setTitle("New Rental");
         setName("New Rental"); // NOI18N
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Enter movie ID:");
+        lblMovieID.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMovieID.setText("Enter movie ID:");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Enter customer ID:");
+        lblCustID.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCustID.setText("Enter customer ID:");
 
         jLabel3.setForeground(new java.awt.Color(255, 0, 51));
         jLabel3.setText("* Mandatory Fields");
 
-        OkButton.setText("OK");
-        OkButton.addActionListener(new java.awt.event.ActionListener() {
+        btnCreateRental.setText("Create Rental");
+        btnCreateRental.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OkButtonActionPerformed(evt);
+                btnCreateRentalActionPerformed(evt);
             }
         });
 
-        CancelButton.setText("Cancel");
-        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelButtonActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldMovieID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtFieldMovieIDActionPerformed(evt);
+            }
+        });
+
+        txtFieldCustID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldCustIDActionPerformed(evt);
             }
         });
 
@@ -84,6 +97,10 @@ public class NewRentalMenu extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 0, 51));
         jLabel5.setText("*");
 
+        cmbFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DVD", "BLURAY" }));
+
+        lblFormat.setText("Format: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,20 +109,30 @@ public class NewRentalMenu extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblMovieID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtFieldMovieID, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblCustID)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtFieldCustID, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(OkButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(CancelButton)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addComponent(btnCreateRental))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblFormat)
+                                .addGap(35, 35, 35)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnCancel))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cmbFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
@@ -115,42 +142,189 @@ public class NewRentalMenu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(55, Short.MAX_VALUE)
+                .addContainerGap(52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMovieID)
+                    .addComponent(txtFieldMovieID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCustID)
+                    .addComponent(txtFieldCustID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(OkButton)
-                    .addComponent(CancelButton))
+                    .addComponent(cmbFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFormat))
+                .addGap(2, 2, 2)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCreateRental)
+                    .addComponent(btnCancel))
                 .addGap(32, 32, 32))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtFieldMovieIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldMovieIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtFieldMovieIDActionPerformed
 
-    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.setVisible(false);   /*probably switch to returning to user screen instead of a straight exit */    // TODO add your handling code here:
-    }//GEN-LAST:event_CancelButtonActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void OkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OkButtonActionPerformed
+    private void btnCreateRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRentalActionPerformed
         // TODO add your handling code here:
         /*insert data into DB based on user ID and movie ID*/
-        this.dispose();
-    }//GEN-LAST:event_OkButtonActionPerformed
+        String movieText = txtFieldMovieID.getText().trim();   // MOVIE ID
+    String userText  = txtFieldCustID.getText().trim();    // USER ID
 
+    if (movieText.isEmpty() || userText.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Movie ID and User ID are required.");
+        return;
+    }
+
+    int movieId;
+    int userId;
+    try {
+        movieId = Integer.parseInt(movieText);
+        userId  = Integer.parseInt(userText);
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Movie ID and User ID must be numbers.");
+        return;
+    }
+
+    // Format (DVD / BLURAY) from the combo box
+    String format = ((String) cmbFormat.getSelectedItem()).toUpperCase();
+    if (!format.equals("DVD") && !format.equals("BLURAY")) {
+        JOptionPane.showMessageDialog(this,
+                "Format must be DVD or BLURAY.");
+        return;
+    }
+
+    Connection cn = null;
+    try {
+        cn = DBConnection.getConnection();
+        cn.setAutoCommit(false);   // start transaction
+
+        // 1) Check that the movie exists and that THIS format is available
+        String availabilityColumn =
+                format.equals("DVD") ? "available_dvd" : "available_bluray";
+
+        String sqlCheck =
+                "SELECT " + availabilityColumn + " " +
+                "FROM movies WHERE movie_id = ? FOR UPDATE";
+
+        boolean available = false;
+        try (PreparedStatement ps = cn.prepareStatement(sqlCheck)) {
+            ps.setInt(1, movieId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    cn.rollback();
+                    JOptionPane.showMessageDialog(this,
+                            "Movie not found with that ID.");
+                    return;
+                }
+                available = (rs.getInt(1) == 1);
+            }
+        }
+
+        if (!available) {
+            cn.rollback();
+            JOptionPane.showMessageDialog(this,
+                    "No copies of this format are currently available.");
+            return;
+        }
+
+        // 2) Insert NEW reservation as PENDING
+        String sqlInsert =
+                "INSERT INTO reservations " +
+                "(user_id, movie_id, price_per_day, reservation_date, " +
+                " return_due_at, additional_fees, status, format) " +
+                "VALUES (?, ?, 2.50, NOW(), DATE_ADD(NOW(), INTERVAL 3 DAY), 0.00, 'PENDING', ?)";
+
+        try (PreparedStatement ps = cn.prepareStatement(sqlInsert)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, movieId);
+            ps.setString(3, format);
+            ps.executeUpdate();
+        }
+
+        // 3) Mark the corresponding format as unavailable for this movie
+        String sqlUpdateMovie =
+                "UPDATE movies SET " + availabilityColumn + " = 0 " +
+                "WHERE movie_id = ?";
+
+        try (PreparedStatement ps = cn.prepareStatement(sqlUpdateMovie)) {
+            ps.setInt(1, movieId);
+            ps.executeUpdate();
+        }
+
+        // 4) Commit transaction
+        cn.commit();
+
+        JOptionPane.showMessageDialog(this,
+                "Rental created successfully for user " + userId + ".");
+
+        // Optional: clear fields
+        txtFieldMovieID.setText("");
+        txtFieldCustID.setText("");
+
+    } catch (Exception ex) {
+        try {
+            if (cn != null) cn.rollback();
+        } catch (Exception ignore) {}
+        java.util.logging.Logger.getLogger(NewRentalMenu.class.getName())
+                .log(java.util.logging.Level.SEVERE, "Admin add rental failed", ex);
+        JOptionPane.showMessageDialog(this,
+                "Error creating rental: " + ex.getMessage());
+    } finally {
+        try {
+            if (cn != null) cn.setAutoCommit(true);
+        } catch (Exception ignore) {}
+    }
+    }//GEN-LAST:event_btnCreateRentalActionPerformed
+
+    
+    private void txtFieldCustIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCustIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldCustIDActionPerformed
+private void addFieldValidation() {
+    txtFieldMovieID.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        public void insertUpdate(javax.swing.event.DocumentEvent e) { validateMovieField(); }
+        public void removeUpdate(javax.swing.event.DocumentEvent e) { validateMovieField(); }
+        public void changedUpdate(javax.swing.event.DocumentEvent e) { validateMovieField(); }
+    });
+
+    txtFieldCustID.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        public void insertUpdate(javax.swing.event.DocumentEvent e) { validateUserField(); }
+        public void removeUpdate(javax.swing.event.DocumentEvent e) { validateUserField(); }
+        public void changedUpdate(javax.swing.event.DocumentEvent e) { validateUserField(); }
+    });
+}
+
+// Called when Movie ID changes
+private void validateMovieField() {
+    if (txtFieldMovieID.getText().trim().isEmpty()) {
+        jLabel4.setVisible(true);   // show *
+    } else {
+        jLabel4.setVisible(false);  // hide *
+    }
+}
+
+// Called when User ID changes
+private void validateUserField() {
+    if (txtFieldCustID.getText().trim().isEmpty()) {
+        jLabel5.setVisible(true);
+    } else {
+        jLabel5.setVisible(false);
+    }
+}
     /**
      * @param args the command line arguments
      */
@@ -177,16 +351,18 @@ public class NewRentalMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton CancelButton;
-    private javax.swing.JButton OkButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnCreateRental;
+    private javax.swing.JComboBox<String> cmbFormat;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel lblCustID;
+    private javax.swing.JLabel lblFormat;
+    private javax.swing.JLabel lblMovieID;
+    private javax.swing.JTextField txtFieldCustID;
+    private javax.swing.JTextField txtFieldMovieID;
     // End of variables declaration//GEN-END:variables
 }
 /* how to make * labels turn invisible/disappear when text is input */

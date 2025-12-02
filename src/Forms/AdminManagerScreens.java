@@ -37,6 +37,7 @@ public class AdminManagerScreens extends javax.swing.JFrame {
         BtnCustomer = new javax.swing.JButton();
         BtnMovies = new javax.swing.JButton();
         BtnRentals = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,28 +71,46 @@ public class AdminManagerScreens extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logoutBtnImg.png"))); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        btnLogout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLogout.setMaximumSize(new java.awt.Dimension(180, 168));
+        btnLogout.setMinimumSize(new java.awt.Dimension(180, 168));
+        btnLogout.setPreferredSize(new java.awt.Dimension(180, 168));
+        btnLogout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(BtnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                .addComponent(BtnMovies, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(BtnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(BtnMovies, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addComponent(BtnRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(BtnRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BtnMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtnCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtnRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BtnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(BtnRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnMovies, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -99,25 +118,29 @@ public class AdminManagerScreens extends javax.swing.JFrame {
 
     private void BtnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCustomerActionPerformed
         // TODO add your handling code here:
-       EditUsers usersForm = new EditUsers();
-       usersForm.setVisible(true);
-
-        
+    new EditUsers().setVisible(true);
+    this.dispose();
         
     }//GEN-LAST:event_BtnCustomerActionPerformed
 
     private void BtnMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMoviesActionPerformed
         // TODO add your handling code here:
-        EditMovies usersForm = new EditMovies();
-       usersForm.setVisible(true);
+         new EditMovies().setVisible(true);
+    this.dispose();
 
     }//GEN-LAST:event_BtnMoviesActionPerformed
 
     private void BtnRentalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRentalsActionPerformed
         // TODO add your handling code here:
-        EditRentals usersForm = new EditRentals();
-        usersForm.setVisible(true);
+    new EditRentals().setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_BtnRentalsActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        new LoginForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,5 +171,6 @@ public class AdminManagerScreens extends javax.swing.JFrame {
     private javax.swing.JButton BtnCustomer;
     private javax.swing.JButton BtnMovies;
     private javax.swing.JButton BtnRentals;
+    private javax.swing.JButton btnLogout;
     // End of variables declaration//GEN-END:variables
 }

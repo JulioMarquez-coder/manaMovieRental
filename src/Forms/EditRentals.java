@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Forms;
-
+import database.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author leandra
@@ -17,6 +22,7 @@ public class EditRentals extends javax.swing.JFrame {
      */
     public EditRentals() {
         initComponents();
+        loadRentals();
     }
 
     /**
@@ -40,19 +46,10 @@ public class EditRentals extends javax.swing.JFrame {
 
         Rental_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Movie ID", "Movie Name", "Customer ID", "Customer Name", "Rented Date"
+                "Reservation ID", "User ID", "Username", "Movie ID", "Title", "Format", "Status", "Rented Date", "Due Date"
             }
         ));
         Rental_Table.setName("rental_table"); // NOI18N
@@ -89,27 +86,27 @@ public class EditRentals extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 822, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(29, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(RentalReturn)
-                        .addGap(33, 33, 33)
+                        .addGap(31, 31, 31)
                         .addComponent(RentalAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAdminMenu)
-                        .addGap(55, 55, 55))))
+                        .addGap(47, 47, 47))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RentalReturn)
                     .addComponent(RentalAdd)
                     .addComponent(btnAdminMenu))
-                .addGap(24, 24, 24))
+                .addGap(53, 53, 53))
         );
 
         pack();
@@ -117,8 +114,27 @@ public class EditRentals extends javax.swing.JFrame {
 
     private void RentalReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalReturnActionPerformed
         // TODO add your handling code here:
-        RentalReturn usersForm = new RentalReturn();
-        usersForm.setVisible(true);
+      int row = Rental_Table.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a rental to return.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) Rental_Table.getModel();
+
+    int reservationId = (int) model.getValueAt(row, 0); // Reservation ID col
+    int movieId       = (int) model.getValueAt(row, 3); // Movie ID col
+    String format     = ((String) model.getValueAt(row, 5)).toUpperCase(); // Format col
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Mark this rental as RETURNED?",
+            "Confirm Return", JOptionPane.YES_NO_OPTION);
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    adminReturnRental(reservationId, movieId, format);
     }//GEN-LAST:event_RentalReturnActionPerformed
 
     private void RentalAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalAddActionPerformed
@@ -133,6 +149,88 @@ public class EditRentals extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAdminMenuActionPerformed
 
+    private void adminReturnRental(int reservationId, int movieId, String format) {
+    Connection cn = null;
+    try {
+        cn = DBConnection.getConnection();
+        cn.setAutoCommit(false);
+
+        // 1) Mark reservation as RETURNED
+        String sqlUpdateReservation =
+            "UPDATE reservations " +
+            "SET status = 'RETURNED', return_actual_at = NOW() " +
+            "WHERE reservation_id = ?";
+        try (PreparedStatement ps = cn.prepareStatement(sqlUpdateReservation)) {
+            ps.setInt(1, reservationId);
+            ps.executeUpdate();
+        }
+
+        // 2) Free the correct format in movies
+        String availabilityColumn =
+                format.equals("DVD") ? "available_dvd" : "available_bluray";
+
+        String sqlUpdateMovie =
+            "UPDATE movies SET " + availabilityColumn + " = 1 " +
+            "WHERE movie_id = ?";
+        try (PreparedStatement ps = cn.prepareStatement(sqlUpdateMovie)) {
+            ps.setInt(1, movieId);
+            ps.executeUpdate();
+        }
+
+        cn.commit();
+        JOptionPane.showMessageDialog(this, "Rental returned successfully.");
+        loadRentals();   // refresh table
+
+    } catch (Exception ex) {
+        try {
+            if (cn != null) cn.rollback();
+        } catch (Exception ignore) {}
+        logger.log(java.util.logging.Level.SEVERE, "Admin return failed", ex);
+        JOptionPane.showMessageDialog(this,
+                "Error returning rental: " + ex.getMessage());
+    } finally {
+        try {
+            if (cn != null) cn.setAutoCommit(true);
+        } catch (Exception ignore) {}
+    }
+}
+    private void loadRentals() {
+    DefaultTableModel model = (DefaultTableModel) Rental_Table.getModel();
+    model.setRowCount(0);  // clear existing rows
+
+    String sql =
+        "SELECT r.reservation_id, r.user_id, u.username, " +
+        "       r.movie_id, m.title, r.format, r.status, " +
+        "       r.reservation_date, r.return_due_at " +
+        "FROM reservations r " +
+        "JOIN movies m ON r.movie_id = m.movie_id " +
+        "JOIN users  u ON r.user_id  = u.user_id " +   // <--- 'id' = PK from your users table
+        "ORDER BY (r.status = 'PENDING') DESC, r.reservation_date DESC";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            model.addRow(new Object[] {
+                rs.getInt("reservation_id"),
+                rs.getInt("user_id"),
+                rs.getString("username"),
+                rs.getInt("movie_id"),
+                rs.getString("title"),
+                rs.getString("format"),
+                rs.getString("status"),
+                rs.getTimestamp("reservation_date"),
+                rs.getTimestamp("return_due_at")
+            });
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error loading rentals", e);
+        JOptionPane.showMessageDialog(this,
+                "Error loading rentals: " + e.getMessage());
+    }
+}
     /**
      * @param args the command line arguments
      */
