@@ -4,6 +4,12 @@
  */
 package Forms;
 
+
+import database.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 /**
  *
  * @author leandra
@@ -11,12 +17,17 @@ package Forms;
 public class RentalReturn extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RentalReturn.class.getName());
-
+    
+    private final int currentUserId;
     /**
      * Creates new form Rental_Return
      */
-    public RentalReturn() {
+    public RentalReturn(int userId) {
+        this.currentUserId = userId;
         initComponents();
+    }
+    public RentalReturn(){
+        this(-1);
     }
 
     /**
@@ -32,6 +43,8 @@ public class RentalReturn extends javax.swing.JFrame {
         CancelButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        lblFormat = new javax.swing.JLabel();
+        cmbFormat = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Returns");
@@ -60,6 +73,10 @@ public class RentalReturn extends javax.swing.JFrame {
             }
         });
 
+        lblFormat.setText("Format: ");
+
+        cmbFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DVD", "BLURAY", " " }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -67,50 +84,117 @@ public class RentalReturn extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
-                        .addComponent(OkButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(CancelButton)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                        .addGap(103, 103, 103)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(OkButton)
+                            .addComponent(lblFormat))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CancelButton)
+                    .addComponent(cmbFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel1))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(OkButton)
-                    .addComponent(CancelButton))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFormat)
+                    .addComponent(cmbFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CancelButton)
+                    .addComponent(OkButton))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+                    
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void OkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OkButtonActionPerformed
-        // TODO add your handling code here:
-        ReturnConfirmation usersForm = new ReturnConfirmation();
-        usersForm.setVisible(true);
-        this.dispose();
+        // TODO add your handling code here:     
+        String text = jTextField1.getText().trim();
+        if (text.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a movie ID.");
+            return;
+        }
+
+        int movieId;
+        try {
+            movieId = Integer.parseInt(text);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Movie ID must be a number.");
+            return;
+        }
+
+        if (currentUserId <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "No logged-in user. Open this screen from the main app.");
+            return;
+        }
+        
+        String format = (String) cmbFormat.getSelectedItem();
+
+        String sql =
+            "SELECT r.reservation_id, r.movie_id, r.format, m.title " +
+        "FROM reservations r " +
+        "JOIN movies m ON r.movie_id = m.movie_id " +
+        "WHERE r.user_id = ? " +
+        "  AND r.movie_id = ? " +
+        "  AND r.format = ? " +              
+        "  AND r.status = 'PENDING' " +
+        "LIMIT 1";
+
+        try (Connection cn = DBConnection.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, currentUserId);
+            ps.setInt(2, movieId);
+            ps.setString(3, format);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    JOptionPane.showMessageDialog(this,
+                            "No active rental found for that movie and this user.");
+                    return;
+                }
+
+                int reservationId = rs.getInt("reservation_id");
+                String title = rs.getString("title");
+
+                ReturnConfirmation rc =
+                        new ReturnConfirmation(reservationId, movieId,
+                                               currentUserId, format, title);
+                rc.setLocationRelativeTo(this);
+                rc.setVisible(true);
+                this.dispose();
+            }
+
+        } catch (Exception e) {
+            logger.log(java.util.logging.Level.SEVERE, "Error looking up rental", e);
+            JOptionPane.showMessageDialog(this,
+                    "Error searching rental: " + e.getMessage());
+        }
+                                          
     }//GEN-LAST:event_OkButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     /**
@@ -141,7 +225,9 @@ public class RentalReturn extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton OkButton;
+    private javax.swing.JComboBox<String> cmbFormat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblFormat;
     // End of variables declaration//GEN-END:variables
 }

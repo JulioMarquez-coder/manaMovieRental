@@ -3,21 +3,72 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Forms;
-
+import database.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 /**
  *
  * @author leandra
  */
 public class ReturnConfirmation extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReturnConfirmation.class.getName());
+        private static final java.util.logging.Logger logger =
+            java.util.logging.Logger.getLogger(ReturnConfirmation.class.getName());
 
+    private int reservationId;
+    private int movieId;
+    private int userId;
+    private String format;
+    private String movieTitle;
     /**
      * Creates new form Return_Confirmation
      */
     public ReturnConfirmation() {
         initComponents();
     }
+    
+    public ReturnConfirmation(int reservationId,
+                          int movieId,
+                          int userId,
+                          String format,
+                          String movieTitle) {
+    this.reservationId = reservationId;
+    this.movieId = movieId;
+    this.userId = userId;
+    this.format = format;
+    this.movieTitle = movieTitle;
+    initComponents();
+    loadReturnDetails();
+}
+    private void loadReturnDetails() {
+    // These labels are guesses based on your form:
+    // jLabel8, 10, 11, 12, 14, 13, 15 are on the right side.
+    // Adjust if they represent something different in your design.
+
+    jLabel8.setText(movieTitle);               // Movie:
+    jLabel10.setText("User ID: " + userId);    // Customer:
+    jLabel11.setText(format);                  // Format:
+
+    String sql = "SELECT reservation_date, return_due_at " +
+                 "FROM reservations WHERE reservation_id = ?";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setInt(1, reservationId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                jLabel12.setText(String.valueOf(rs.getTimestamp("reservation_date"))); // Rent date
+                jLabel14.setText(String.valueOf(rs.getTimestamp("return_due_at")));    // Due date
+                // You can calculate extra things like late fees here if needed
+            }
+        }
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error loading return details", e);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,7 +219,63 @@ public class ReturnConfirmation extends javax.swing.JFrame {
     private void CompleteReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CompleteReturnButtonActionPerformed
         // TODO add your handling code here:
         /* removes entire row from user rental tab, research database deletion via java code*/
+        Connection cn = null;
+    try {
+        cn = DBConnection.getConnection();
+        cn.setAutoCommit(false);
+
+        // 1) Mark reservation as returned
+        String sqlRes =
+                "UPDATE reservations " +
+                "SET status = 'RETURNED', return_actual_at = NOW() " +
+                "WHERE reservation_id = ? AND user_id = ?";
+        try (PreparedStatement psRes = cn.prepareStatement(sqlRes)) {
+            psRes.setInt(1, reservationId);
+            psRes.setInt(2, userId);
+            int updated = psRes.executeUpdate();
+            if (updated == 0) {
+                cn.rollback();
+                JOptionPane.showMessageDialog(this,
+                        "No matching active reservation found.");
+                return;
+            }
+        }
+
+        // 2) Make the specific format available again
+        String column = "DVD".equalsIgnoreCase(format)
+                ? "available_dvd"
+                : "available_bluray";
+
+        String sqlMovie =
+                "UPDATE movies SET " + column + " = 1 WHERE movie_id = ?";
+        try (PreparedStatement psMovie = cn.prepareStatement(sqlMovie)) {
+            psMovie.setInt(1, movieId);
+            psMovie.executeUpdate();
+        }
+
+        cn.commit();
+        
+        JOptionPane.showMessageDialog(this, "Movie returned successfully.");
+        
+        MovieBrowser browser = new MovieBrowser(userId);
+        browser.setLocationRelativeTo(null);   // center on screen (optional)
+        browser.setVisible(true);
+
+        
         this.dispose();
+
+    } catch (Exception e) {
+        if (cn != null) {
+            try { cn.rollback(); } catch (Exception ex) { /* ignore */ }
+        }
+        logger.log(java.util.logging.Level.SEVERE, "Error completing return", e);
+        JOptionPane.showMessageDialog(this,
+                "Error completing return: " + e.getMessage());
+    } finally {
+        if (cn != null) {
+            try { cn.setAutoCommit(true); } catch (Exception ex) { /* ignore */ }
+        }
+    }
     }//GEN-LAST:event_CompleteReturnButtonActionPerformed
 
     private void CancelReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelReturnButtonActionPerformed
