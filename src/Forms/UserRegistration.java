@@ -4,11 +4,11 @@ package Forms;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import java.awt.Image;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+//import javax.swing.ImageIcon;
+//import javax.swing.JPanel;
+//import java.awt.Image;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
 import database.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,6 +58,12 @@ public class UserRegistration extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         UsernameField = new javax.swing.JTextField();
         UserIMG = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        PhoneField = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        AddressField = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        ZipCodeField = new javax.swing.JTextField();
 
         jLabel9.setText("jLabel9");
 
@@ -135,63 +141,83 @@ public class UserRegistration extends javax.swing.JFrame {
 
         UserIMG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ICON_REGISTER.png"))); // NOI18N
 
+        jLabel8.setText("Phone:");
+
+        jLabel10.setText("Address:");
+
+        jLabel11.setText("ZipCode:");
+
+        ZipCodeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZipCodeFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(93, 93, 93)
-                                    .addComponent(jLabel2))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(55, 55, 55)
-                                    .addComponent(jLabel3))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(43, 43, 43)
-                                    .addComponent(jLabel4))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(58, 58, 58)
-                                    .addComponent(jLabel6)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel5)
-                                .addGap(6, 6, 6))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(55, 55, 55)
+                                        .addComponent(jLabel3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(37, 37, 37)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel1))))
+                                .addComponent(jLabel10))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
-                                .addComponent(jLabel1)
-                                .addGap(1, 1, 1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE))
+                                .addGap(37, 37, 37)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(15, 15, 15)
+                                            .addComponent(jLabel6)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(6, 6, 6))
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addGap(0, 9, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)))
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CityField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(FirstNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(MiddleNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(LastNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(DOBField, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(UsernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(UserIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(FirstNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                        .addComponent(MiddleNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                        .addComponent(LastNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                        .addComponent(PhoneField)
+                        .addComponent(AddressField)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(ZipCodeField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CityField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
+                    .addComponent(DOBField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(UserIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(RegisterButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(CancelRegisButton)))
                 .addGap(25, 25, 25))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(212, 212, 212)
-                .addComponent(RegisterButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74)
-                .addComponent(CancelRegisButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -205,11 +231,23 @@ public class UserRegistration extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(LastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(PhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(AddressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(CityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ZipCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(DOBField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -220,18 +258,18 @@ public class UserRegistration extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(CancelRegisButton)
+                                .addComponent(RegisterButton))))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(13, 13, 13)
-                        .addComponent(UserIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RegisterButton)
-                    .addComponent(CancelRegisButton))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addComponent(UserIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(101, 101, 101)))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
-        setBounds(0, 0, 664, 376);
+        setBounds(0, 0, 664, 409);
     }// </editor-fold>//GEN-END:initComponents
 
     private void MiddleNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MiddleNameFieldActionPerformed
@@ -266,13 +304,17 @@ public class UserRegistration extends javax.swing.JFrame {
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
         // TODO add your handling code here:
         /*inserts user data into database - if user data is repeated add error message?*/
-        String firstName  = FirstNameField.getText().trim();
+    String firstName  = FirstNameField.getText().trim();
     String middleName = MiddleNameField.getText().trim();
     String lastName   = LastNameField.getText().trim();
     String city       = CityField.getText().trim();
     String dobText    = DOBField.getText().trim();      // expected format: YYYY-MM-DD
     String username   = UsernameField.getText().trim();
     String password   = PasswordField.getText().trim();
+    String phone    = PhoneField.getText().trim();
+    String address  = AddressField.getText().trim();
+    String zipCode  = ZipCodeField.getText().trim();
+
 
     // Basic validation
     if (firstName.isEmpty() || lastName.isEmpty()
@@ -312,27 +354,46 @@ public class UserRegistration extends javax.swing.JFrame {
         // 2) Insert new user (role will be USER by default)
         String insertSql =
             "INSERT INTO users " +
-            "(first_name, middle_name, last_name, city, birth_date, " +
+            "(first_name, middle_name, last_name, phone, address, city, zip_code, birth_date, " +
             " username, password_hash, role) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, 'USER')";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'USER')";
 
         try (PreparedStatement ps = cn.prepareStatement(insertSql)) {
             ps.setString(1, firstName);
             ps.setString(2, middleName.isEmpty() ? null : middleName);
             ps.setString(3, lastName);
-            ps.setString(4, city.isEmpty() ? null : city);
 
+             // phone
+            ps.setString(4, phone.isEmpty() ? null : phone);
+
+            // address
+            ps.setString(5, address.isEmpty() ? null : address);
+
+            // city
+            ps.setString(6, city.isEmpty() ? null : city);
+
+            // zip_code
+            ps.setString(7, zipCode.isEmpty() ? null : zipCode);
+
+            // birth_date
             if (birthDate != null) {
-                ps.setDate(5, birthDate);
+                ps.setDate(8, birthDate);
             } else {
-                ps.setNull(5, Types.DATE);
+                ps.setNull(8, Types.DATE);
             }
 
-            ps.setString(6, username);
-            // For this project we store the plain password in password_hash
-            ps.setString(7, password);
+            // username
+            ps.setString(9, username);
 
-            ps.executeUpdate();
+            // password_hash
+            ps.setString(10, password);
+            
+            int rows = ps.executeUpdate();
+    if (rows == 0) {
+        JOptionPane.showMessageDialog(this,
+                "No se pudo registrar el usuario (0 filas afectadas).");
+        return;
+    }
         }
 
         JOptionPane.showMessageDialog(this,
@@ -354,6 +415,10 @@ public class UserRegistration extends javax.swing.JFrame {
         new LoginForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CancelRegisButtonActionPerformed
+
+    private void ZipCodeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZipCodeFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ZipCodeFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -382,6 +447,7 @@ public class UserRegistration extends javax.swing.JFrame {
     private javax.swing.JLabel pictureLabel;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField AddressField;
     private javax.swing.JButton CancelRegisButton;
     private javax.swing.JTextField CityField;
     private javax.swing.JTextField DOBField;
@@ -389,16 +455,21 @@ public class UserRegistration extends javax.swing.JFrame {
     private javax.swing.JTextField LastNameField;
     private javax.swing.JTextField MiddleNameField;
     private javax.swing.JTextField PasswordField;
+    private javax.swing.JTextField PhoneField;
     private javax.swing.JButton RegisterButton;
     private javax.swing.JLabel UserIMG;
     private javax.swing.JTextField UsernameField;
+    private javax.swing.JTextField ZipCodeField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }
