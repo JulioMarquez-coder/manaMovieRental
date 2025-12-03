@@ -33,7 +33,7 @@ public class EditMovies extends javax.swing.JFrame {
     String sql =
         "SELECT movie_id, title, release_date, genre, " +
         "       running_time_minutes, rate, poster_url, " +
-        "       director, writers, cast " +
+        "       director, writers, cast, synopsis, costo " +
         "FROM movies";
 
     try (Connection cn = DBConnection.getConnection();
@@ -51,7 +51,9 @@ public class EditMovies extends javax.swing.JFrame {
                 rs.getString("poster_url"),          // Phote (URL)
                 rs.getString("director"),            // Director
                 rs.getString("writers"),             // Writers
-                rs.getString("cast")                 // Cast
+                rs.getString("cast"),                // Cast
+                rs.getString("synopsis"),            // Synopsis
+                rs.getString("costo")                // Cost
             };
             model.addRow(row);
         }
@@ -83,13 +85,13 @@ public class EditMovies extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Title", "Release Date", "Genre", "Run Time", "Rated", "Phote", "Director", "Writers", "Cast"
+                "Id", "Title", "Release Date", "Genre", "Run Time", "Rated", "Phote", "Director", "Writers", "Cast", "Synopsis", "Cost"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -126,26 +128,27 @@ public class EditMovies extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(BtnAdd)
                 .addGap(18, 18, 18)
                 .addComponent(BtnEdit)
                 .addGap(18, 18, 18)
                 .addComponent(BtnDelete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 527, Short.MAX_VALUE)
                 .addComponent(btnAdminMenu)
                 .addGap(44, 44, 44))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnAdd)
                     .addComponent(BtnEdit)
@@ -178,6 +181,8 @@ public class EditMovies extends javax.swing.JFrame {
     String releaseStr = JOptionPane.showInputDialog(this, "Release date (YYYY-MM-DD):");
     String cast       = JOptionPane.showInputDialog(this, "Cast:");
     String posterUrl  = JOptionPane.showInputDialog(this, "Poster URL (image link):");
+    String synopsis       = JOptionPane.showInputDialog(this, "Synopsis");
+    String costStr  = JOptionPane.showInputDialog(this, "Cost: (e.g 2.50):");
 
     // 2. Convert runtime
     Integer runtime = null;
@@ -201,11 +206,23 @@ public class EditMovies extends javax.swing.JFrame {
             return;
         }
     }
+    
+    // 4. Convert cost (costo)
+    java.math.BigDecimal cost = null;
+    if (costStr != null && !costStr.isBlank()) {
+        try {
+            cost = new java.math.BigDecimal(costStr.trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Cost must be a valid number (e.g. 2.50).");
+            return;
+        }
+    }
 
     String sql = "INSERT INTO movies " +
                  "(title, director, writers, release_date, " +
-                 " running_time_minutes, rate, genre, cast, poster_url) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                 " running_time_minutes, rate, genre, cast, poster_url, synopsis, costo) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection cn = DBConnection.getConnection();
          PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -230,6 +247,13 @@ public class EditMovies extends javax.swing.JFrame {
         ps.setString(7, genre);
         ps.setString(8, cast);
         ps.setString(9, posterUrl);
+        ps.setString(10, (synopsis == null || synopsis.isBlank()) ? null : synopsis);
+        
+        if (cost != null) {
+            ps.setBigDecimal(11, cost);
+        } else {
+            ps.setNull(11, java.sql.Types.DECIMAL);
+        }
 
         ps.executeUpdate();
         JOptionPane.showMessageDialog(this, "Movie added successfully.");
@@ -266,6 +290,8 @@ public class EditMovies extends javax.swing.JFrame {
     String director    = String.valueOf(model.getValueAt(row, 7));
     String writers     = String.valueOf(model.getValueAt(row, 8));
     String cast        = String.valueOf(model.getValueAt(row, 9));
+    String synopsis    = String.valueOf(model.getValueAt(row, 10));
+    String costStr     = String.valueOf(model.getValueAt(row, 11));
 
     if (idObj == null) {
         JOptionPane.showMessageDialog(this,
@@ -292,6 +318,8 @@ public class EditMovies extends javax.swing.JFrame {
     javax.swing.JTextField txtDirector    = new javax.swing.JTextField(director);
     javax.swing.JTextField txtWriters     = new javax.swing.JTextField(writers);
     javax.swing.JTextField txtCast        = new javax.swing.JTextField(cast);
+    javax.swing.JTextField txtSynopsis    = new javax.swing.JTextField(synopsis);
+    javax.swing.JTextField txtCost        = new javax.swing.JTextField(costStr);
 
     // Panel for the dialog
     javax.swing.JPanel panel = new javax.swing.JPanel();
@@ -314,6 +342,10 @@ public class EditMovies extends javax.swing.JFrame {
     panel.add(txtWriters);
     panel.add(new javax.swing.JLabel("Cast:"));
     panel.add(txtCast);
+    panel.add(new javax.swing.JLabel("Synopsis:"));
+    panel.add(txtSynopsis);
+    panel.add(new javax.swing.JLabel("Cost:"));
+    panel.add(txtCost);
 
     int result = JOptionPane.showConfirmDialog(
             this,
@@ -337,6 +369,9 @@ public class EditMovies extends javax.swing.JFrame {
     String newDirector    = txtDirector.getText().trim();
     String newWriters     = txtWriters.getText().trim();
     String newCast        = txtCast.getText().trim();
+    String newSynopsis    = txtSynopsis.getText().trim();
+    String newCostStr     = txtCost.getText().trim();
+
 
     int newRunTime;
     try {
@@ -345,6 +380,17 @@ public class EditMovies extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,
                 "Run Time must be a number.");
         return;
+    }
+    
+    java.math.BigDecimal newCost = null;
+    if (!newCostStr.isBlank()) {
+        try {
+            newCost = new java.math.BigDecimal(newCostStr);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Cost must be a valid number (e.g. 2.50).");
+            return;
+        }
     }
 
     // Update in database
@@ -358,7 +404,9 @@ public class EditMovies extends javax.swing.JFrame {
         "poster_url = ?, " +
         "director = ?, " +
         "writers = ?, " +
-        "cast = ? " +
+        "cast = ?, " +
+        "synopsis = ?, " +
+        "costo = ? " +
         "WHERE movie_id = ?";
 
     try (Connection cn = DBConnection.getConnection();
@@ -373,7 +421,15 @@ public class EditMovies extends javax.swing.JFrame {
         ps.setString(7, newDirector);
         ps.setString(8, newWriters);
         ps.setString(9, newCast);
-        ps.setInt(10, movieId);
+        ps.setString(10, newSynopsis.isBlank() ? null : newSynopsis);
+
+        if (newCost != null) {
+            ps.setBigDecimal(11, newCost);
+        } else {
+            ps.setNull(11, java.sql.Types.DECIMAL);
+        }
+
+        ps.setInt(12, movieId);
 
         int updated = ps.executeUpdate();
         if (updated > 0) {
