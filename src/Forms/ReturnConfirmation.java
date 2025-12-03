@@ -88,9 +88,11 @@ public ReturnConfirmation(int reservationId, int movieId,
     this.movieTitle = movieTitle;
 
     initComponents();
+    
+    loadReturnDetails(); 
 
     // Change lblInfo to your real label name
-    jLabel1.setText("Return " + movieTitle + " (" + format + ")?");
+    //jLabel1.setText("Return " + movieTitle + " (" + format + ")?");
 }
 
 
@@ -99,26 +101,53 @@ public ReturnConfirmation(int reservationId, int movieId,
     // jLabel8, 10, 11, 12, 14, 13, 15 are on the right side.
     // Adjust if they represent something different in your design.
 
-    jLabel8.setText(movieTitle);               // Movie:
-    jLabel10.setText("User ID: " + userId);    // Customer:
-    jLabel11.setText(format);                  // Format:
-
-    String sql = "SELECT reservation_date, return_due_at " +
-                 "FROM reservations WHERE reservation_id = ?";
-
+    LabPreMovie.setText(movieTitle);               // Movie:
+    LabPreCustomer.setText("User ID: " + currentUserId);    // Customer:
+    LabPreRented.setText(format);                  // Format:
+    LabPreReturned.setText("loading...");
+    LabPreCost.setText("loading...");
+    LabPreDays.setText("loading...");
+    LabPreCostDays.setText("loading...");
+    
+     String sql = 
+        "SELECT r.reservation_date, r.return_due_at, " +
+        "       DATEDIFF(IFNULL(NOW(), r.reservation_date), r.reservation_date) AS days_rented, " +
+        "       m.costo " +
+        "FROM reservations r " +
+        "JOIN movies m ON r.movie_id = m.movie_id " +
+        "WHERE r.reservation_id = ?";
+     
     try (Connection cn = DBConnection.getConnection();
          PreparedStatement ps = cn.prepareStatement(sql)) {
 
         ps.setInt(1, reservationId);
+        
         try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                jLabel12.setText(String.valueOf(rs.getTimestamp("reservation_date"))); // Rent date
-                jLabel14.setText(String.valueOf(rs.getTimestamp("return_due_at")));    // Due date
-                // You can calculate extra things like late fees here if needed
+                 java.sql.Timestamp reservationDate = rs.getTimestamp("reservation_date");
+                //java.sql.Timestamp dueDate = rs.getTimestamp("return_due_at");
+                long daysRented = rs.getLong("days_rented");
+                double costPerDay = rs.getDouble("costo");
+
+                // Formatear las fechas para que se vean bonitas
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                LabPreRented.setText(sdf.format(reservationDate));  // Rented On:
+                
+                // Solo para mostrar: asumimos que se devuelve hoy
+                java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+                LabPreReturned.setText(sdf.format(now));            // Returned On:
+
+                LabPreCost.setText(String.format("$%.2f per day", costPerDay)); // Cost:
+                LabPreDays.setText(daysRented + " days");                       // Total Days:
+
+                double totalCost = costPerDay * daysRented;
+                LabPreCostDays.setText(String.format("$%.2f", totalCost));      // Total Cost:
             }
         }
     } catch (Exception e) {
         logger.log(java.util.logging.Level.SEVERE, "Error loading return details", e);
+        JOptionPane.showMessageDialog(this, "Error loading receipt details: " + e.getMessage());
     }
 }
 
@@ -140,13 +169,13 @@ public ReturnConfirmation(int reservationId, int movieId,
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        LabPreMovie = new javax.swing.JLabel();
+        LabPreCustomer = new javax.swing.JLabel();
+        LabPreRented = new javax.swing.JLabel();
+        LabPreReturned = new javax.swing.JLabel();
+        LabPreDays = new javax.swing.JLabel();
+        LabPreCost = new javax.swing.JLabel();
+        LabPreCostDays = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,19 +208,19 @@ public ReturnConfirmation(int reservationId, int movieId,
 
         jLabel7.setText("Total Cost:");
 
-        jLabel8.setText("import db");
+        LabPreMovie.setText("import db");
 
-        jLabel10.setText("import db");
+        LabPreCustomer.setText("import db");
 
-        jLabel11.setText("import db");
+        LabPreRented.setText("import db");
 
-        jLabel12.setText("import db");
+        LabPreReturned.setText("import db");
 
-        jLabel13.setText("import db");
+        LabPreDays.setText("import db");
 
-        jLabel14.setText("import db");
+        LabPreCost.setText("import db");
 
-        jLabel15.setText("import cost mult by days");
+        LabPreCostDays.setText("import cost mult by days");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -216,14 +245,14 @@ public ReturnConfirmation(int reservationId, int movieId,
                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreRented, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreReturned, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreCost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabPreDays, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel15)
+                        .addComponent(LabPreCostDays)
                         .addGap(0, 72, Short.MAX_VALUE)))
                 .addGap(22, 22, 22))
         );
@@ -233,31 +262,31 @@ public ReturnConfirmation(int reservationId, int movieId,
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel8))
+                    .addComponent(LabPreMovie))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabPreCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel11))
+                    .addComponent(LabPreRented))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel12))
+                    .addComponent(LabPreReturned))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel14))
+                    .addComponent(LabPreCost))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel13))
+                    .addComponent(LabPreDays))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel15))
+                    .addComponent(LabPreCostDays))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CompleteReturnButton)
@@ -315,19 +344,21 @@ public ReturnConfirmation(int reservationId, int movieId,
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelReturnButton;
     private javax.swing.JButton CompleteReturnButton;
+    private javax.swing.JLabel LabPreCost;
+    private javax.swing.JLabel LabPreCostDays;
+    private javax.swing.JLabel LabPreCustomer;
+    private javax.swing.JLabel LabPreDays;
+    private javax.swing.JLabel LabPreMovie;
+    private javax.swing.JLabel LabPreRented;
+    private javax.swing.JLabel LabPreReturned;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
+
+    
 }
