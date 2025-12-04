@@ -13,7 +13,7 @@ package videostore;
  * -Isaiah Vega Rodríguez; A00618913 Sección: 92065
  *
  * Usuario ADMIN: 
- *   - usuario: admim
+ *   - usuario: admin
  *   - password: admin123
  * 
  *
