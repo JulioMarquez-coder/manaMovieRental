@@ -156,9 +156,7 @@ public class RentalReturn extends javax.swing.JFrame {
     }
 
     if (currentUserId <= 0) {
-        JOptionPane.showMessageDialog(this,
-                "No logged-in user. Open this screen from the main app.");
-        return;
+        
     }
 
     // If you have a combo box for format (DVD / BLURAY), keep this:
