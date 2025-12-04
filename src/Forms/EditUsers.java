@@ -27,7 +27,13 @@ public class EditUsers extends javax.swing.JFrame {
         setLocationRelativeTo(null); // Centra la ventana
         loadUsers(); // Carga los usuarios al abrir
     }
-private void loadUsers() {
+    // Nombre: loadUsers
+    // Propósito: Leer todos los usuarios de la base de datos y mostrarlos en la tabla tblUsers.
+    // PreCondiciones: La conexión a la base de datos debe funcionar y el modelo de la tabla debe estar inicializado.
+    // PostCondiciones: La tabla se limpia y se vuelve a llenar con los datos actuales de la tabla users.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor, solo actualiza la interfaz con la información de los usuarios.
+    private void loadUsers() {
     DefaultTableModel model = (DefaultTableModel) tblUsers.getModel();
     // Limpiar filas actuales
     model.setRowCount(0);
@@ -158,6 +164,12 @@ private void loadUsers() {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Nombre: BtnAgregarActionPerformed
+    // Propósito: Pedir los datos de un nuevo usuario por cuadros de diálogo e insertarlo en la base de datos.
+    // PreCondiciones: La tabla users debe existir y aceptar los campos indicados; DBConnection debe conectar bien.
+    // PostCondiciones: Si todo sale bien, se inserta un nuevo usuario con rol USER y se recarga la tabla de usuarios.
+    // Argumentos: evt - evento que se genera cuando se presiona el botón "Agregar".
+    // Valores: No devuelve valor, solo interactúa con la BD y actualiza la interfaz.
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
         // TODO add your handling code here:
         // Pedir datos por ventanitas
@@ -242,6 +254,12 @@ private void loadUsers() {
     }
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
+    // Nombre: BtnEliminarActionPerformed
+    // Propósito: Eliminar de la base de datos el usuario seleccionado en la tabla.
+    // PreCondiciones: Debe haber una fila seleccionada y ese ID debe existir en la tabla users.
+    // PostCondiciones: Si el usuario confirma, se elimina el registro de la BD y se actualiza la tabla.
+    // Argumentos: evt - evento generado al presionar el botón "Eliminar".
+    // Valores: No devuelve valor, solo borra el usuario y actualiza la vista.
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
         // TODO add your handling code here:
         int fila = tblUsers.getSelectedRow();
@@ -296,6 +314,12 @@ private void loadUsers() {
     }
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
+    // Nombre: BtnEditarActionPerformed
+    // Propósito: Permitir editar los datos básicos del usuario seleccionado y guardar los cambios en la BD.
+    // PreCondiciones: Debe haber un usuario seleccionado en la tabla y la conexión a la BD debe funcionar.
+    // PostCondiciones: Si todo va bien, se actualiza el registro en la BD y se recarga la tabla con los nuevos datos.
+    // Argumentos: evt - evento generado al presionar el botón "Editar".
+    // Valores: No devuelve valor, solo actualiza la base de datos y la tabla.
     private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
         // TODO add your handling code here:
         int fila = tblUsers.getSelectedRow();

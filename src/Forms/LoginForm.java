@@ -158,8 +158,8 @@ public class LoginForm extends javax.swing.JFrame {
     // Argumentos: evt - evento generado al presionar el botón "Login".
     // Valores: No devuelve valor, pero muestra mensajes y cambia de ventana según el resultado.
     private void BtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLoginActionPerformed
-         String username = txtUsername.getText().trim();
-    String password = new String(txtPassword.getPassword());
+        String username = txtUsername.getText().trim();
+        String password = new String(txtPassword.getPassword());
 
     if (username.isEmpty() || password.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Llena usuario y contraseña.");
@@ -209,6 +209,12 @@ if (rs.next()) {
     }
     }//GEN-LAST:event_BtLoginActionPerformed
 
+    // Nombre: txtPasswordKeyTyped
+    // Propósito: Controlar la cantidad de caracteres permitidos.
+    // PreCondiciones: El campo txtUsername debe existir y estar inicializado.
+    // PostCondiciones: Si el texto de txtUsername pasa de 60 caracteres, se evita que siga escribiendo.
+    // Argumentos: evt - evento de teclado que se dispara al tipear en el campo de password.
+    // Valores: No devuelve valor, solo controla la entrada de texto.
     private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
         // TODO add your handling code here:
         if (txtUsername.getText().length()>= 60){
@@ -216,12 +222,24 @@ if (rs.next()) {
         }
     }//GEN-LAST:event_txtPasswordKeyTyped
 
+    // Nombre: BtRegisterActionPerformed
+    // Propósito: Abrir la pantalla de registro de usuario para crear una nueva cuenta.
+    // PreCondiciones: La clase UserRegistration debe existir y poder crearse sin errores.
+    // PostCondiciones: Se muestra la ventana de registro y se cierra la ventana de login actual.
+    // Argumentos: evt - evento generado al presionar el botón "Register".
+    // Valores: No devuelve valor.
     private void BtRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtRegisterActionPerformed
         // TODO add your handling code here:
         new UserRegistration().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BtRegisterActionPerformed
 
+    // Nombre: btnExitActionPerformed
+    // Propósito: Preguntar al usuario si desea salir de la aplicación y cerrarla si confirma.
+    // PreCondiciones: La ventana debe estar abierta y el usuario debe poder ver el cuadro de confirmación.
+    // PostCondiciones: Si el usuario confirma, la aplicación termina con System.exit(0); si no, se queda igual.
+    // Argumentos: evt - evento generado al presionar el botón "Exit".
+    // Valores: No devuelve valor.
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
         int choice = JOptionPane.showConfirmDialog(

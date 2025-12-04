@@ -26,6 +26,12 @@ public class EditMovies extends javax.swing.JFrame {
         loadMovies();
     }
     
+    // Nombre: loadMovies
+    // Propósito: Leer todas las películas desde la base de datos y mostrarlas en la tabla de la pantalla.
+    // PreCondiciones: La conexión a la base de datos debe funcionar y la tabla "movies" debe existir.
+    // PostCondiciones: La tabla jTable1 se limpia y se vuelve a llenar con los registros que hay en "movies".
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor, solo actualiza el modelo de la tabla.
     private void loadMovies() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); // clear existing rows
@@ -160,12 +166,24 @@ public class EditMovies extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Nombre: btnAdminMenuActionPerformed
+    // Propósito: Volver al menú principal de administración desde la pantalla de películas.
+    // PreCondiciones: La clase AdminManagerScreens debe existir y estar accesible.
+    // PostCondiciones: Se abre la ventana AdminManagerScreens y esta ventana de EditMovies se cierra.
+    // Argumentos: evt - evento que se dispara al hacer clic en el botón "Admin Menu".
+    // Valores: No devuelve valor.
     private void btnAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminMenuActionPerformed
         // TODO add your handling code here:
         new AdminManagerScreens().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminMenuActionPerformed
 
+    // Nombre: BtnAddActionPerformed
+    // Propósito: Pedir los datos de una nueva película por ventanas y guardarla en la tabla "movies".
+    // PreCondiciones: La conexión a la base de datos debe funcionar y la tabla "movies" debe tener las columnas usadas en el INSERT.
+    // PostCondiciones: Si todo sale bien, se inserta una nueva fila en "movies" y se recarga la tabla de películas.
+    // Argumentos: evt - evento que se dispara al hacer clic en el botón "Add".
+    // Valores: No devuelve valor.
     private void BtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddActionPerformed
         // TODO add your handling code here:
          String title = JOptionPane.showInputDialog(this, "Title:");
@@ -268,6 +286,12 @@ public class EditMovies extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_BtnAddActionPerformed
 
+    // Nombre: BtnEditActionPerformed
+    // Propósito: Permitir editar los datos de una película seleccionada y actualizar el registro en la base de datos.
+    // PreCondiciones: Debe haber una fila seleccionada en la tabla con un movie_id válido.
+    // PostCondiciones: Si el admin confirma y los datos son válidos, se hace UPDATE en "movies" y se recarga la tabla.
+    // Argumentos: evt - evento que se dispara al hacer clic en el botón "Edit".
+    // Valores: No devuelve valor.
     private void BtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditActionPerformed
         // TODO add your handling code here:
        int row = jTable1.getSelectedRow();
@@ -448,6 +472,12 @@ public class EditMovies extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_BtnEditActionPerformed
 
+    // Nombre: BtnDeleteActionPerformed
+    // Propósito: Borrar una película seleccionada, siempre y cuando no tenga rentas activas (PENDING).
+    // PreCondiciones: Debe haber una película seleccionada en la tabla con un movie_id válido.
+    // PostCondiciones: Si no tiene rentas pendientes, se borra primero el historial de reservations de esa película y luego el registro en movies, actualizando la tabla.
+    // Argumentos: evt - evento que se dispara al hacer clic en el botón "Delete".
+    // Valores: No devuelve valor.
     private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
         
         int row = jTable1.getSelectedRow();
@@ -537,6 +567,12 @@ public class EditMovies extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_BtnDeleteActionPerformed
 
+    // Nombre: safeString
+    // Propósito: Evitar errores cuando un valor viene nulo al convertirlo a String.
+    // PreCondiciones: El argumento puede ser null o cualquier objeto.
+    // PostCondiciones: Devuelve un String sin espacios al principio/fin, o vacío si el valor era null.
+    // Argumentos: value - objeto que se quiere convertir de forma segura a String.
+    // Valores: String con el contenido del objeto o "" si era null.
     private String safeString(Object value) {
     return value == null ? "" : value.toString().trim();
 }

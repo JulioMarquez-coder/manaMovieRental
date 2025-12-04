@@ -112,6 +112,12 @@ public class EditRentals extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Nombre: RentalReturnActionPerformed
+    // Propósito: Tomar la renta seleccionada en la tabla y marcarla como devuelta desde el lado del administrador.
+    // PreCondiciones: Debe haber una fila seleccionada en Rental_Table con datos válidos de reservación y película.
+    // PostCondiciones: Si el admin confirma, se llama a adminReturnRental para actualizar la BD y se recargan las rentas.
+    // Argumentos: evt - evento que se dispara al presionar el botón "Return Movie".
+    // Valores: No devuelve valor.
     private void RentalReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalReturnActionPerformed
         // TODO add your handling code here:
       int row = Rental_Table.getSelectedRow();
@@ -137,18 +143,36 @@ public class EditRentals extends javax.swing.JFrame {
     adminReturnRental(reservationId, movieId, format);
     }//GEN-LAST:event_RentalReturnActionPerformed
 
+    // Nombre: RentalAddActionPerformed
+    // Propósito: Abrir la ventana para crear una nueva renta manualmente desde el panel de administración.
+    // PreCondiciones: La clase NewRentalMenu debe existir y estar funcionando sin errores.
+    // PostCondiciones: Se muestra la pantalla NewRentalMenu, pero esta ventana (EditRentals) sigue abierta.
+    // Argumentos: evt - evento que se dispara al presionar el botón "Add Rental".
+    // Valores: No devuelve valor.
     private void RentalAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentalAddActionPerformed
         // TODO add your handling code here:
         NewRentalMenu usersForm = new NewRentalMenu();
         usersForm.setVisible(true);
     }//GEN-LAST:event_RentalAddActionPerformed
 
+    // Nombre: btnAdminMenuActionPerformed
+    // Propósito: Regresar al menú principal de administración desde la pantalla de rentas.
+    // PreCondiciones: La clase AdminManagerScreens debe estar definida y ser accesible.
+    // PostCondiciones: Se abre AdminManagerScreens y esta ventana de EditRentals se cierra.
+    // Argumentos: evt - evento al presionar el botón "Admin Menu".
+    // Valores: No devuelve valor.
     private void btnAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminMenuActionPerformed
         // TODO add your handling code here:
         new AdminManagerScreens().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdminMenuActionPerformed
 
+    // Nombre: adminReturnRental
+    // Propósito: Marcar una reservación como devuelta y volver a habilitar el formato correcto (DVD/BluRay) de la película.
+    // PreCondiciones: reservationId y movieId deben existir en la base de datos; el formato debe ser "DVD" o "BLURAY".
+    // PostCondiciones: La reservación cambia a status 'RETURNED', se actualiza la disponibilidad de la película y se recargan las rentas.
+    // Argumentos: reservationId - ID de la reservación; movieId - ID de la película; format - formato de la renta (DVD/BLURAY).
+    // Valores: No devuelve valor, solo actualiza la BD y la tabla.
     private void adminReturnRental(int reservationId, int movieId, String format) {
     Connection cn = null;
     try {
@@ -194,6 +218,12 @@ public class EditRentals extends javax.swing.JFrame {
         } catch (Exception ignore) {}
     }
 }
+    // Nombre: loadRentals
+    // Propósito: Cargar todas las rentas desde la base de datos y mostrarlas en la tabla Rental_Table.
+    // PreCondiciones: La conexión a la base de datos debe funcionar y las tablas reservations, movies y users deben existir con los campos usados en el query.
+    // PostCondiciones: La tabla se limpia y se vuelve a llenar con las rentas actuales, ordenando primero las PENDING.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor, solo actualiza el modelo de la tabla.
     private void loadRentals() {
     DefaultTableModel model = (DefaultTableModel) Rental_Table.getModel();
     model.setRowCount(0);  // clear existing rows

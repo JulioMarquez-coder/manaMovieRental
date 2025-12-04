@@ -116,6 +116,12 @@ public class AdminManagerScreens extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Nombre: BtnCustomerActionPerformed
+    // Propósito: Abrir la pantalla de administración de usuarios (clientes) desde el menú de admin.
+    // PreCondiciones: La clase EditUsers debe estar disponible y su constructor no debe fallar.
+    // PostCondiciones: Se muestra la ventana EditUsers y se cierra la ventana actual de AdminManagerScreens.
+    // Argumentos: evt - evento de clic del botón "Customer".
+    // Valores: No devuelve valor.
     private void BtnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCustomerActionPerformed
         // TODO add your handling code here:
     new EditUsers().setVisible(true);
@@ -123,6 +129,12 @@ public class AdminManagerScreens extends javax.swing.JFrame {
         
     }//GEN-LAST:event_BtnCustomerActionPerformed
 
+    // Nombre: BtnMoviesActionPerformed
+    // Propósito: Abrir la pantalla de administración de películas desde el menú de admin.
+    // PreCondiciones: La clase EditMovies debe existir y poder crearse.
+    // PostCondiciones: Se abre la ventana EditMovies y se cierra AdminManagerScreens.
+    // Argumentos: evt - evento de clic del botón "Movies".
+    // Valores: No devuelve valor.
     private void BtnMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMoviesActionPerformed
         // TODO add your handling code here:
          new EditMovies().setVisible(true);
@@ -130,12 +142,24 @@ public class AdminManagerScreens extends javax.swing.JFrame {
 
     }//GEN-LAST:event_BtnMoviesActionPerformed
 
+    // Nombre: BtnRentalsActionPerformed
+    // Propósito: Abrir la pantalla donde el admin maneja las rentas (ver, añadir y marcar devoluciones).
+    // PreCondiciones: La clase EditRentals debe existir y conectarse correctamente con la base de datos.
+    // PostCondiciones: Se abre la ventana EditRentals y se cierra la ventana AdminManagerScreens.
+    // Argumentos: evt - evento de clic del botón "Rentals".
+    // Valores: No devuelve valor.
     private void BtnRentalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRentalsActionPerformed
         // TODO add your handling code here:
     new EditRentals().setVisible(true);
     this.dispose();
     }//GEN-LAST:event_BtnRentalsActionPerformed
 
+    // Nombre: btnLogoutActionPerformed
+    // Propósito: Cerrar la sesión del administrador y regresar a la pantalla de Login.
+    // PreCondiciones: La clase LoginForm debe existir y ser accesible.
+    // PostCondiciones: Se cierra AdminManagerScreens y se muestra la ventana de LoginForm.
+    // Argumentos: evt - evento de clic del botón "Logout".
+    // Valores: No devuelve valor.
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         new LoginForm().setVisible(true);
