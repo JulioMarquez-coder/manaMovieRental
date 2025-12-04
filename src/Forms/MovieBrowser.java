@@ -21,6 +21,11 @@ public class MovieBrowser extends javax.swing.JFrame {
 
     private final int currentUserId;
     private Integer selectedMovieId = null;
+    
+    private String safeString(String value) {
+    return value == null ? "" : value;
+}
+
 
     // Constructor used from LoginForm / other screens
     public MovieBrowser(int userId) {
@@ -151,6 +156,8 @@ public class MovieBrowser extends javax.swing.JFrame {
         txtMovieID = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtUserID = new javax.swing.JTextField();
+        btnEditPersonalInformation = new javax.swing.JButton();
+        btnCurrentRented = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -282,6 +289,20 @@ public class MovieBrowser extends javax.swing.JFrame {
 
         jLabel2.setText("User Id:");
 
+        btnEditPersonalInformation.setText("Edit my personal information");
+        btnEditPersonalInformation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditPersonalInformationActionPerformed(evt);
+            }
+        });
+
+        btnCurrentRented.setText("Current rented movies");
+        btnCurrentRented.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCurrentRentedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout rtPanelLayout = new javax.swing.GroupLayout(rtPanel);
         rtPanel.setLayout(rtPanelLayout);
         rtPanelLayout.setHorizontalGroup(
@@ -334,17 +355,20 @@ public class MovieBrowser extends javax.swing.JFrame {
                                 .addComponent(lblCurrentUser)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel1))))
-                    .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(rtPanelLayout.createSequentialGroup()
-                            .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnReturnMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnHoldDvd, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
-                            .addGap(106, 106, 106)
-                            .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(rtPanelLayout.createSequentialGroup()
+                                .addComponent(btnReturnMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(rtPanelLayout.createSequentialGroup()
+                                .addComponent(btnHoldDvd, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCurrentRented)
+                        .addComponent(btnEditPersonalInformation)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtMovieID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -369,7 +393,7 @@ public class MovieBrowser extends javax.swing.JFrame {
                             .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(txtUserID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(rtPanelLayout.createSequentialGroup()
                                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -407,14 +431,18 @@ public class MovieBrowser extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83)
+                .addGap(18, 18, 18)
+                .addComponent(btnEditPersonalInformation)
+                .addGap(18, 18, 18)
+                .addComponent(btnCurrentRented)
+                .addGap(1, 1, 1)
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHoldDvd, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnHoldDvd, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnReturnMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnReturnMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42))
         );
 
@@ -499,6 +527,210 @@ public class MovieBrowser extends javax.swing.JFrame {
     private void txtMovieIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMovieIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMovieIDActionPerformed
+
+    private void btnEditPersonalInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditPersonalInformationActionPerformed
+        // TODO add your handling code here:
+        
+        if (currentUserId <= 0) {
+        JOptionPane.showMessageDialog(this,
+                "No hay un usuario válido logueado.");
+        return;
+    }
+
+    // 1) Leer datos actuales del usuario desde la BD
+    String sqlSelect = "SELECT first_name, middle_name, last_name, " +
+                       "phone, address, city, zip_code, birth_date " +
+                       "FROM users WHERE user_id = ?";
+
+    String firstName = "";
+    String middleName = "";
+    String lastName = "";
+    String phone = "";
+    String address = "";
+    String city = "";
+    String zipCode = "";
+    String birthDateStr = "";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sqlSelect)) {
+
+        ps.setInt(1, currentUserId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                firstName  = safeString(rs.getString("first_name"));
+                middleName = safeString(rs.getString("middle_name"));
+                lastName   = safeString(rs.getString("last_name"));
+                phone      = safeString(rs.getString("phone"));
+                address    = safeString(rs.getString("address"));
+                city       = safeString(rs.getString("city"));
+                zipCode    = safeString(rs.getString("zip_code"));
+
+                java.sql.Date bd = rs.getDate("birth_date");
+                if (bd != null) {
+                    birthDateStr = bd.toString(); // formato YYYY-MM-DD
+                }
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el usuario en la base de datos.");
+                return;
+            }
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error leyendo datos del usuario", e);
+        JOptionPane.showMessageDialog(this,
+                "Error leyendo datos del usuario: " + e.getMessage());
+        return;
+    }
+
+    // 2) Pedir nuevos valores con JOptionPane (prellenados)
+    firstName  = JOptionPane.showInputDialog(this, "First name:", firstName);
+    if (firstName == null || firstName.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
+        return;
+    }
+
+    middleName = JOptionPane.showInputDialog(this, "Middle name (opcional):", middleName);
+    if (middleName == null) middleName = "";
+
+    lastName   = JOptionPane.showInputDialog(this, "Last name:", lastName);
+    if (lastName == null || lastName.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "El apellido no puede estar vacío.");
+        return;
+    }
+
+    phone      = JOptionPane.showInputDialog(this, "Phone (opcional):", phone);
+    if (phone == null) phone = "";
+
+    address    = JOptionPane.showInputDialog(this, "Address (opcional):", address);
+    if (address == null) address = "";
+
+    city       = JOptionPane.showInputDialog(this, "City (opcional):", city);
+    if (city == null) city = "";
+
+    zipCode    = JOptionPane.showInputDialog(this, "Zip code (opcional):", zipCode);
+    if (zipCode == null) zipCode = "";
+
+    birthDateStr = JOptionPane.showInputDialog(
+            this, "Birth date (YYYY-MM-DD, o vacío):", birthDateStr);
+    if (birthDateStr == null) birthDateStr = "";
+
+    // 3) Hacer el UPDATE en la BD
+    String sqlUpdate = "UPDATE users SET " +
+                       "first_name = ?, middle_name = ?, last_name = ?, " +
+                       "phone = ?, address = ?, city = ?, zip_code = ?, birth_date = ? " +
+                       "WHERE user_id = ?";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sqlUpdate)) {
+
+        ps.setString(1, firstName.trim());
+        ps.setString(2, middleName.trim());
+        ps.setString(3, lastName.trim());
+        ps.setString(4, phone.trim());
+        ps.setString(5, address.trim());
+        ps.setString(6, city.trim());
+        ps.setString(7, zipCode.trim());
+
+        if (birthDateStr.isBlank()) {
+            ps.setNull(8, java.sql.Types.DATE);
+        } else {
+            ps.setString(8, birthDateStr.trim()); // asume YYYY-MM-DD
+        }
+
+        ps.setInt(9, currentUserId);
+
+        int rows = ps.executeUpdate();
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Información actualizada correctamente.");
+            // refrescar label con el nombre nuevo
+            loadCurrentUserName();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se actualizó el usuario (verifica el ID).");
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error actualizando usuario", e);
+        JOptionPane.showMessageDialog(this,
+                "Error actualizando usuario: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnEditPersonalInformationActionPerformed
+
+    private void btnCurrentRentedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCurrentRentedActionPerformed
+        // TODO add your handling code here:
+        
+        if (currentUserId <= 0) {
+        JOptionPane.showMessageDialog(this,
+                "No hay un usuario válido logueado.");
+        return;
+    }
+
+    // Solo mostrar rentas activas. Aquí uso status = 'PENDING'.
+    // Si más adelante usas 'RENTED', puedes cambiar el WHERE.
+    String sql =
+        "SELECT r.reservation_id, m.title, r.format, r.status, " +
+        "       r.reservation_date, r.return_due_at " +
+        "FROM reservations r " +
+        "JOIN movies m ON r.movie_id = m.movie_id " +
+        "WHERE r.user_id = ? AND r.status = 'PENDING' " +
+        "ORDER BY r.reservation_date DESC";
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("Películas actualmente rentadas:\n\n");
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setInt(1, currentUserId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            int count = 0;
+
+            while (rs.next()) {
+                count++;
+
+                int reservationId = rs.getInt("reservation_id");
+                String title      = rs.getString("title");
+                String format     = rs.getString("format");
+                String status     = rs.getString("status");
+
+                java.sql.Timestamp resTs = rs.getTimestamp("reservation_date");
+                java.sql.Timestamp dueTs = rs.getTimestamp("return_due_at");
+
+                String resStr = (resTs != null) ? resTs.toString() : "N/A";
+                String dueStr = (dueTs != null) ? dueTs.toString() : "N/A";
+
+                sb.append(count).append(". ")
+                  .append(title != null ? title : "(sin título)").append("\n")
+                  .append("   Reservation ID: ").append(reservationId).append("\n")
+                  .append("   Format: ").append(format != null ? format : "N/A").append("\n")
+                  .append("   Status: ").append(status != null ? status : "N/A").append("\n")
+                  .append("   Reserved at: ").append(resStr).append("\n")
+                  .append("   Due date: ").append(dueStr).append("\n\n");
+            }
+
+            if (count == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Ahora mismo no tienes películas rentadas.",
+                        "My current rentals",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        sb.toString(),
+                        "My current rentals",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error cargando rentas del usuario", e);
+        JOptionPane.showMessageDialog(this,
+                "Error cargando tus rentas: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnCurrentRentedActionPerformed
 
     /**
      * @param args the command line arguments
@@ -814,6 +1046,8 @@ private void setLargePoster(String posterPath) {
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCurrentRented;
+    private javax.swing.JButton btnEditPersonalInformation;
     private javax.swing.JButton btnHoldBluray;
     private javax.swing.JButton btnHoldDvd;
     private javax.swing.JButton btnLogout;
