@@ -4,11 +4,7 @@ package Forms;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-//import javax.swing.ImageIcon;
-//import javax.swing.JPanel;
-//import java.awt.Image;
-//import javax.swing.JFrame;
-//import javax.swing.JLabel;
+
 import database.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,6 +22,12 @@ public class UserRegistration extends javax.swing.JFrame {
     /**
      * Creates new form User_Registration
      */
+    
+    // Nombre: UserRegistration
+    // Propósito: Crear la pantalla de registro de usuario y dejarla lista con todos los componentes.
+    // PostCondiciones: La ventana de registro queda inicializada y lista para usarse.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
     public UserRegistration() {
         initComponents();
         
@@ -301,6 +303,12 @@ public class UserRegistration extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_FirstNameFieldActionPerformed
 
+    // Nombre: RegisterButtonActionPerformed
+    // Propósito: Tomar todos los datos del formulario, validarlos y registrar el usuario en la base de datos.
+    // PreCondiciones: La conexión a la base de datos debe funcionar y la tabla users debe existir con las columnas correctas.
+    // PostCondiciones: Si todo sale bien, se inserta el usuario nuevo, se muestra un mensaje y se regresa al LoginForm.
+    // Argumentos: evt - evento del botón de registrar.
+    // Valores: No devuelve valor.
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
         // TODO add your handling code here:
         /*inserts user data into database - if user data is repeated add error message?*/
@@ -410,6 +418,12 @@ public class UserRegistration extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_RegisterButtonActionPerformed
 
+    // Nombre: CancelRegisButtonActionPerformed
+    // Propósito: Cancelar el registro y volver a la pantalla de login.
+    // PreCondiciones: LoginForm debe existir y poder mostrarse sin errores.
+    // PostCondiciones: Se cierra este formulario de registro y se enseña el LoginForm.
+    // Argumentos: evt - evento que dispara el botón de cancelar.
+    // Valores: No devuelve valor.
     private void CancelRegisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelRegisButtonActionPerformed
         // TODO add your handling code here:
         new LoginForm().setVisible(true);

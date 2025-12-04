@@ -22,6 +22,13 @@ public class RentalReturn extends javax.swing.JFrame {
     /**
      * Creates new form Rental_Return
      */
+    
+    // Nombre: RentalReturn (constructor con userId)
+    // Propósito: Crear la ventana de devoluciones sabiendo qué usuario está usando el sistema.
+    // PreCondiciones: Debe existir un usuario logueado y se le pasa su id correctamente.
+    // PostCondiciones: La pantalla de RentalReturn queda lista para que el usuario escriba el ID de la película a devolver.
+    // Argumentos: userId - id del usuario que está usando la aplicación.
+    // Valores: No devuelve valor.
     public RentalReturn(int userId) {
         this.currentUserId = userId;
         initComponents();
@@ -125,6 +132,13 @@ public class RentalReturn extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    
+    // Nombre: OkButtonActionPerformed
+    // Propósito: Validar el ID de película que escribe el usuario, buscar su renta activa y abrir la pantalla de confirmación de devolución.
+    // PreCondiciones: Debe haber un usuario logueado (currentUserId > 0) y existir la tabla reservations/movies con los campos usados en el query.
+    // PostCondiciones: Si encuentra la renta pendiente, abre ReturnConfirmation con los datos correctos y cierra esta ventana.
+    // Argumentos: evt - evento del botón OK.
+    // Valores: No devuelve valor, pero muestra mensajes y abre/cierra ventanas según el resultado.
     private void OkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OkButtonActionPerformed
         // TODO add your handling code here:     
         String text = jTextField1.getText().trim();
@@ -203,6 +217,12 @@ public class RentalReturn extends javax.swing.JFrame {
                                           
     }//GEN-LAST:event_OkButtonActionPerformed
 
+    // Nombre: CancelButtonActionPerformed
+    // Propósito: Cerrar la pantalla de devoluciones y regresar al browser de películas.
+    // PreCondiciones: La clase MovieBrowser debe existir y poder mostrarse sin errores.
+    // PostCondiciones: Se cierra esta ventana y se abre MovieBrowser.
+    // Argumentos: evt - evento del botón Cancel.
+    // Valores: No devuelve valor.
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         // TODO add your handling code here:
         new MovieBrowser().setVisible(true);

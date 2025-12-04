@@ -19,6 +19,12 @@ public class DBConnection {
     private static final String USER = "root";           
     private static final String PASS = "Piolin15@";  
 
+    // Nombre: getConnection
+    // Propósito: Establecer y devolver una conexión a la base de datos MySQL.
+    // PreCondiciones: La base de datos debe estar activa; credenciales correctos; el driver JDBC debe estar configurado.
+    // PostCondiciones: Retorna un objeto Connection listo para usarse o lanza una excepción si falla.
+    // Argumentos: Ninguno.
+    // Valores: Retorna un objeto Connection.
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
 }

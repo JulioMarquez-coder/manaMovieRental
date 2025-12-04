@@ -176,6 +176,12 @@ public class NewRentalMenu extends javax.swing.JFrame {
         this.setVisible(false);   /*probably switch to returning to user screen instead of a straight exit */    // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    // Nombre: btnCreateRentalActionPerformed
+    // Propósito: Validar los datos del formulario y crear un nuevo alquiler en la base de datos.
+    // PreCondiciones: La tabla movies y reservations deben existir, y DBConnection debe poder conectarse correctamente.
+    // PostCondiciones: Si todo está bien, se inserta una reserva PENDING, se marca el formato como no disponible y se limpian los campos.
+    // Argumentos: evt - evento del botón "Create Rental".
+    // Valores: No devuelve valor, pero muestra mensajes, hace commit/rollback y limpia el formulario.
     private void btnCreateRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRentalActionPerformed
         // TODO add your handling code here:
         /*insert data into DB based on user ID and movie ID*/
@@ -294,7 +300,14 @@ public class NewRentalMenu extends javax.swing.JFrame {
     private void txtFieldCustIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCustIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldCustIDActionPerformed
-private void addFieldValidation() {
+
+    // Nombre: addFieldValidation
+    // Propósito: Conectar listeners a los campos de texto para que los asteriscos (*) se oculten cuando el usuario escriba algo.
+    // PreCondiciones: txtFieldMovieID, txtFieldCustID, jLabel4 y jLabel5 deben estar inicializados por initComponents().
+    // PostCondiciones: Cada vez que se escriba o borre texto, se llama a validateMovieField y validateUserField automáticamente.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
+    private void addFieldValidation() {
     txtFieldMovieID.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
         public void insertUpdate(javax.swing.event.DocumentEvent e) { validateMovieField(); }
         public void removeUpdate(javax.swing.event.DocumentEvent e) { validateMovieField(); }
@@ -308,8 +321,13 @@ private void addFieldValidation() {
     });
 }
 
-// Called when Movie ID changes
-private void validateMovieField() {
+    // Nombre: validateMovieField
+    // Propósito: Revisar el campo de Movie ID y mostrar/ocultar el asterisco rojo dependiendo si está vacío o no.
+    // PreCondiciones: txtFieldMovieID y jLabel4 deben existir y estar ya creados en la interfaz.
+    // PostCondiciones: jLabel4 se hace visible si el campo está vacío y se esconde si tiene texto.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
+    private void validateMovieField() {
     if (txtFieldMovieID.getText().trim().isEmpty()) {
         jLabel4.setVisible(true);   // show *
     } else {
@@ -317,8 +335,13 @@ private void validateMovieField() {
     }
 }
 
-// Called when User ID changes
-private void validateUserField() {
+    // Nombre: validateUserField
+    // Propósito: Revisar el campo de User ID y manejar el asterisco rojo de requerido.
+    // PreCondiciones: txtFieldCustID y jLabel5 deben estar inicializados.
+    // PostCondiciones: jLabel5 se muestra si el campo está vacío y se oculta si el usuario escribió algo.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
+    private void validateUserField() {
     if (txtFieldCustID.getText().trim().isEmpty()) {
         jLabel5.setVisible(true);
     } else {

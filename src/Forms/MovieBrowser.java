@@ -53,6 +53,12 @@ public class MovieBrowser extends javax.swing.JFrame {
         
     }
 
+    // Nombre: loadCurrentUserName
+    // Propósito: Buscar en la base de datos el nombre del usuario logueado y mostrarlo en la pantalla.
+    // PreCondiciones: currentUserId debe tener un valor válido (> 0) y la tabla users debe existir.
+    // PostCondiciones: La etiqueta lblCurrentUser muestra el nombre completo del usuario o un mensaje de error.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
     private void loadCurrentUserName() {
     if (currentUserId <= 0) {
         lblCurrentUser.setText("Logged in as: (unknown)");
@@ -418,17 +424,35 @@ public class MovieBrowser extends javax.swing.JFrame {
     private void txtWritersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtWritersActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtWritersActionPerformed
-
+    
+    // Nombre: btnHoldDvdActionPerformed
+    // Propósito: Crear una reserva (hold) del formato DVD para la película seleccionada.
+    // PreCondiciones: Debe haber una película seleccionada (selectedMovieId != null) y un usuario logueado.
+    // PostCondiciones: Se intenta crear la reserva de DVD llamando al método placeHold con el formato "DVD".
+    // Argumentos: evt - evento del botón "Hold DVD".
+    // Valores: No devuelve valor.
     private void btnHoldDvdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoldDvdActionPerformed
         // TODO add your handling code here:
         placeHold("DVD");
     }//GEN-LAST:event_btnHoldDvdActionPerformed
 
+    // Nombre: btnHoldBlurayActionPerformed
+    // Propósito: Crear una reserva (hold) del formato BluRay para la película seleccionada.
+    // PreCondiciones: Debe existir una película seleccionada y un usuario logueado.
+    // PostCondiciones: Se intenta crear la reserva de BLURAY usando el método placeHold.
+    // Argumentos: evt - evento del botón "Hold Blu-Ray".
+    // Valores: No devuelve valor.
     private void btnHoldBlurayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoldBlurayActionPerformed
         // TODO add your handling code here:
         placeHold("BLURAY");
     }//GEN-LAST:event_btnHoldBlurayActionPerformed
 
+    // Nombre: btnReturnMovieActionPerformed
+    // Propósito: Abrir la pantalla de devoluciones (RentalReturn) para que el usuario pueda devolver sus películas.
+    // PreCondiciones: currentUserId debe ser un usuario válido; la clase RentalReturn debe existir.
+    // PostCondiciones: Se muestra la ventana de RentalReturn y se cierra MovieBrowser actual.
+    // Argumentos: evt - evento del botón "Return DVD/BluRay".
+    // Valores: No devuelve valor.
     private void btnReturnMovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnMovieActionPerformed
         // TODO add your handling code here:
         RentalReturn rr = new RentalReturn(currentUserId);
@@ -438,6 +462,12 @@ public class MovieBrowser extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_btnReturnMovieActionPerformed
 
+    // Nombre: btnLogoutActionPerformed
+    // Propósito: Cerrar la sesión actual y regresar a la pantalla de Login.
+    // PreCondiciones: La clase LoginForm debe existir y poder crearse sin errores.
+    // PostCondiciones: Se cierra MovieBrowser y se muestra la ventana de LoginForm.
+    // Argumentos: evt - evento del botón "Log Out".
+    // Valores: No devuelve valor.
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         new LoginForm().setVisible(true);
@@ -477,6 +507,12 @@ public class MovieBrowser extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new MovieBrowser(1).setVisible(true));
     }
     
+    // Nombre: clearDetails
+    // Propósito: Limpiar los campos de detalle de la película seleccionada y deshabilitar los botones de hold.
+    // PreCondiciones: Los componentes gráficos deben haber sido inicializados por initComponents().
+    // PostCondiciones: No hay película seleccionada, los campos quedan vacíos y no se puede reservar hasta seleccionar otra vez.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
     private void clearDetails() {
     selectedMovieId = null;
     txtMovieID.setText("");
@@ -492,6 +528,12 @@ public class MovieBrowser extends javax.swing.JFrame {
     btnHoldDvd.setEnabled(false);
     btnHoldBluray.setEnabled(false);
 }
+    // Nombre: placeHold
+    // Propósito: Crear una reserva (PENDING) para el usuario actual y el formato indicado (DVD/BLURAY) de la película seleccionada.
+    // PreCondiciones: selectedMovieId no puede ser null, currentUserId debe ser válido y las tablas movies/reservations deben existir.
+    // PostCondiciones: Si hay disponibilidad, se inserta un registro en reservations, se marca el formato como no disponible y se recarga la interfaz.
+    // Argumentos: format - formato a reservar ("DVD" o "BLURAY").
+    // Valores: No devuelve valor, pero muestra mensajes y maneja transacciones (commit/rollback).
     private void placeHold(String format) {
     if (selectedMovieId == null) {
         JOptionPane.showMessageDialog(this,
@@ -578,6 +620,12 @@ public class MovieBrowser extends javax.swing.JFrame {
     }
 }
     
+    // Nombre: loadAvailableMovies
+    // Propósito: Cargar todas las películas que tienen al menos un formato disponible y mostrarlas como tarjetas en el panel izquierdo.
+    // PreCondiciones: La tabla movies debe existir y contener los campos movie_id, title, poster_url, available_dvd y available_bluray.
+    // PostCondiciones: pnlMovies se llena con las tarjetas de películas disponibles y se refresca la interfaz.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
      private void loadAvailableMovies() {
     pnlMovies.removeAll(); // remove previous cards
 
@@ -607,6 +655,12 @@ public class MovieBrowser extends javax.swing.JFrame {
     pnlMovies.revalidate();
     pnlMovies.repaint();
 }
+    // Nombre: createMovieCard
+    // Propósito: Crear una tarjeta visual para una película con su póster y un botón de detalles.
+    // PreCondiciones: Se recibe un movieId, título y ruta/URL del póster válidos (la ruta puede ser null).
+    // PostCondiciones: Devuelve un JPanel listo para añadirse al contenedor principal de películas.
+    // Argumentos: movieId - id de la película; title - título de la película; posterPath - ruta o URL de la imagen del póster.
+    // Valores: Retorna un JPanel que representa la tarjeta de la película.
      private javax.swing.JPanel createMovieCard(int movieId, String title, String posterPath) {
     javax.swing.JPanel card = new javax.swing.JPanel();
     card.setLayout(new javax.swing.BoxLayout(card, javax.swing.BoxLayout.Y_AXIS));
@@ -652,7 +706,12 @@ public class MovieBrowser extends javax.swing.JFrame {
 }
 
     
-
+    // Nombre: loadMovieDetails
+    // Propósito: Cargar todos los detalles de una película específica y mostrarlos en el panel derecho.
+    // PreCondiciones: Debe existir una fila en la tabla movies con el movie_id recibido.
+    // PostCondiciones: Se actualizan los campos de texto, costo, botones de hold y la imagen grande del póster.
+    // Argumentos: movieId - id de la película que se quiere mostrar.
+    // Valores: No devuelve valor.
     private void loadMovieDetails(int movieId) {
     String sql = "SELECT * FROM movies WHERE movie_id = ?";
 
@@ -700,6 +759,12 @@ public class MovieBrowser extends javax.swing.JFrame {
                 "Error loading movie details: " + e.getMessage());
     }
 }
+    // Nombre: setLargePoster
+    // Propósito: Cargar y mostrar el póster grande de la película en el label principal de la derecha.
+    // PreCondiciones: posterPath debe apuntar a una imagen válida (archivo local o URL), o puede ser null/vacío.
+    // PostCondiciones: lblPoster muestra la imagen escalada o un texto de "No image" si no se pudo cargar.
+    // Argumentos: posterPath - ruta en disco o URL donde se encuentra la imagen del póster.
+    // Valores: No devuelve valor.
 private void setLargePoster(String posterPath) {
     if (posterPath == null || posterPath.isBlank()) {
         lblPoster.setIcon(null);

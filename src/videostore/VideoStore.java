@@ -28,7 +28,12 @@ public class VideoStore {
             e.printStackTrace();
         }
         
-        
+        // Nombre: run (clase anónima Runnable)
+        // Propósito: Ejecutar el LoginForm.
+        // PreCondiciones: LoginForm debe existir y tener un constructor sin parámetros.
+        // PostCondiciones: Se muestra la pantalla de inicio de sesión.
+        // Argumentos: Ninguno específico. 
+        // Valores: No devuelve valor.
         java.awt.EventQueue.invokeLater(new Runnable(){
             public void run() {
                 new LoginForm().setVisible(true);

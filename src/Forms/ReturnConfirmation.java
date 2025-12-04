@@ -25,7 +25,13 @@ public class ReturnConfirmation extends javax.swing.JFrame {
     private String movieTitle;
     private final int currentUserId;
 
-private void returnMovie(int reservationId, int movieId, int userId, String format) {
+    // Nombre: returnMovie
+    // Propósito: Encargarse de completar la devolución de una película en la base de datos.
+    // PreCondiciones: Debe existir la reserva con ese reservationId, debe pertenecer al usuario y la conexión a la BD debe funcionar.
+    // PostCondiciones: La reserva queda marcada como RETURNED y el formato físico (DVD/Blu-ray) se libera para ser alquilado otra vez.
+    // Argumentos: reservationId - id de la reserva; movieId - id de la película; userId - id del usuario; format - tipo de formato (DVD/BluRay).
+    // Valores: No devuelve valor, pero muestra mensajes en pantalla y hace commit/rollback según el resultado.
+    private void returnMovie(int reservationId, int movieId, int userId, String format) {
 
     Connection cn = null;
     try {
@@ -74,11 +80,25 @@ private void returnMovie(int reservationId, int movieId, int userId, String form
     /**
      * Creates new form Return_Confirmation
      */
+    
+    // Nombre: ReturnConfirmation (constructor sin parámetros)
+    // Propósito: Crear la ventana de confirmación de devolución con valores por defecto (placeholder).
+    // PreCondiciones: La GUI debe compilar bien y los componentes del formulario deben estar configurados en el diseñador.
+    // PostCondiciones: La ventana se inicializa con ids en -1 y texto vacío, lista para usar si se requiere.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor.
     public ReturnConfirmation() {
         this(-1, -1, -1, "", "");
         initComponents();
     }
     
+    // Nombre: ReturnConfirmation (constructor con parámetros)
+    // Propósito: Crear la ventana de confirmación de devolución con la info real de la reserva y la película.
+    // PreCondiciones: Los ids de reserva, película y usuario deben ser válidos, y el formato y título deben venir correctos.
+    // PostCondiciones: La ventana queda lista, se inicializan los campos y se cargan los detalles de la devolución.
+    // Argumentos: reservationId - id de la reserva; movieId - id de la película; currentUserId - id del usuario actual;
+    // format - formato físico (DVD/BluRay); movieTitle - título de la película.
+    // Valores: No devuelve valor.
 public ReturnConfirmation(int reservationId, int movieId,
                           int currentUserId, String format, String movieTitle) {
     this.reservationId = reservationId;
@@ -95,7 +115,12 @@ public ReturnConfirmation(int reservationId, int movieId,
     //jLabel1.setText("Return " + movieTitle + " (" + format + ")?");
 }
 
-
+    // Nombre: loadReturnDetails
+    // Propósito: Cargar del sistema los datos de la reserva (fechas, días y costo) y mostrarlos en las etiquetas del formulario.
+    // PreCondiciones: Debe existir una reserva con ese reservationId y la tabla reservations/movies debe tener los campos usados en el query.
+    // PostCondiciones: Las etiquetas de la pantalla se actualizan con la información de la renta y el costo total calculado.
+    // Argumentos: Ninguno.
+    // Valores: No devuelve valor, pero actualiza los labels de la interfaz y puede mostrar mensajes de error.
     private void loadReturnDetails() {
     // These labels are guesses based on your form:
     // jLabel8, 10, 11, 12, 14, 13, 15 are on the right side.
@@ -302,7 +327,7 @@ public ReturnConfirmation(int reservationId, int movieId,
         /* removes entire row from user rental tab, research database deletion via java code*/
         returnMovie(reservationId, movieId, currentUserId, format);
 
-    // After success → return to movie browser
+    // After success return to movie browser
     MovieBrowser mb = new MovieBrowser(currentUserId);
     mb.setLocationRelativeTo(this);
     mb.setVisible(true);
@@ -310,6 +335,12 @@ public ReturnConfirmation(int reservationId, int movieId,
     this.dispose();
     }//GEN-LAST:event_CompleteReturnButtonActionPerformed
 
+    // Nombre: CancelReturnButtonActionPerformed
+    // Propósito: Cancelar la devolución y regresar a la pantalla de MovieBrowser.
+    // PreCondiciones: La clase MovieBrowser debe existir y poder abrirse sin errores.
+    // PostCondiciones: Se cierra esta ventana y se muestra la ventana de MovieBrowser.
+    // Argumentos: evt - evento del botón "Cancel Return".
+    // Valores: No devuelve valor.
     private void CancelReturnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelReturnButtonActionPerformed
         // TODO add your handling code here:
         new MovieBrowser().setVisible(true);

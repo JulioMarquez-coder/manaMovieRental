@@ -22,6 +22,8 @@ public class LoginForm extends javax.swing.JFrame {
     /**
      * Creates new form LoginForm
      */
+    
+    
     public LoginForm() {
         initComponents();
     }
@@ -149,6 +151,12 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
+    // Nombre: BtLoginActionPerformed
+    // Propósito: Validar las credenciales del usuario y decidir si entra como admin o usuario normal.
+    // PreCondiciones: Debe haber conexión a la base de datos y la tabla users debe existir con los campos usados.
+    // PostCondiciones: Si el login es correcto, abre la pantalla correspondiente (admin o MovieBrowser) y cierra el login.
+    // Argumentos: evt - evento generado al presionar el botón "Login".
+    // Valores: No devuelve valor, pero muestra mensajes y cambia de ventana según el resultado.
     private void BtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLoginActionPerformed
          String username = txtUsername.getText().trim();
     String password = new String(txtPassword.getPassword());
