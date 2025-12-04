@@ -5,17 +5,22 @@
 package videostore;
 
 /**
+*
  * Group Project: COMP-4400 - SYSTEMS DEVELOPMENT N IMPLEMEN
  * Participants: 
-    * -Leandra Dorta; A00619185 Sección: 92065
-    * -Julio Marquez Torres; A00622314 Sección: 75813
-    * -Isaiah Vega Rodríguez; A00618913 Sección: 92065
-    *
-    * Usuario ADMIN: 
-    *   - usuario: admim
-    *   - password: admin123
-    * 
+ * -Leandra Dorta; A00619185 Sección: 92065
+ * -Julio Marquez Torres; A00622314 Sección: 75813
+ * -Isaiah Vega Rodríguez; A00618913 Sección: 92065
+ *
+ * Usuario ADMIN: 
+ *   - usuario: admim
+ *   - password: admin123
+ * 
+ *
+ *
  * @author julio
+*
+* 
  */
 import Forms.LoginForm;
 import database.DBConnection;
@@ -37,12 +42,7 @@ public class VideoStore {
             e.printStackTrace();
         }
         
-        // Nombre: run (clase anónima Runnable)
-        // Propósito: Ejecutar el LoginForm.
-        // PreCondiciones: LoginForm debe existir y tener un constructor sin parámetros.
-        // PostCondiciones: Se muestra la pantalla de inicio de sesión.
-        // Argumentos: Ninguno específico. 
-        // Valores: No devuelve valor.
+        
         java.awt.EventQueue.invokeLater(new Runnable(){
             public void run() {
                 new LoginForm().setVisible(true);
