@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class DBConnection {
     private static final String URL  = "jdbc:mysql://localhost:3306/video_store";
     private static final String USER = "root";           
-    private static final String PASS = "Piolin15@";  
+    private static final String PASS = "roccO0802!";  
 
     // Nombre: getConnection
     // Propósito: Establecer y devolver una conexión a la base de datos MySQL.
