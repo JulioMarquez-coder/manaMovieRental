@@ -26,7 +26,28 @@ public class MovieBrowser extends javax.swing.JFrame {
     public MovieBrowser(int userId) {
         this.currentUserId = userId;
         initComponents();
-        loadAvailableMovies(); // ⬅️ we’ll create this method
+        
+        // Para que el usuario no modifique
+        txtTitle.setEditable(false);
+        txtDirector.setEditable(false);
+        txtWriters.setEditable(false);
+        txtGenre.setEditable(false);
+        txtRated.setEditable(false);
+        txtRuntime.setEditable(false);
+        txtReleaseDate.setEditable(false);
+        txtCast.setEditable(false);
+        txtSynopsis.setEditable(false);
+        txtCost.setEditable(false);
+        
+        // Para que los detalles no se vean en una sola línea.
+        txtCast.setLineWrap(true);
+        txtCast.setWrapStyleWord(true);
+        
+        txtSynopsis.setLineWrap(true);
+        txtSynopsis.setWrapStyleWord(true);
+        
+                
+        loadAvailableMovies(); // we’ll create this method
         loadCurrentUserName();
         
     }
@@ -101,11 +122,16 @@ public class MovieBrowser extends javax.swing.JFrame {
         btnReturnMovie = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtCast = new java.awt.TextArea();
+        txtCast = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtSynopsis = new java.awt.TextArea();
+        txtSynopsis = new javax.swing.JTextArea();
         btnLogout = new javax.swing.JButton();
         lblCurrentUser = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtCost = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -125,7 +151,7 @@ public class MovieBrowser extends javax.swing.JFrame {
         );
         ltPanelLayout.setVerticalGroup(
             ltPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(ltPanel);
@@ -175,10 +201,14 @@ public class MovieBrowser extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 2, 0, 10));
 
+        txtCast.setColumns(20);
+        txtCast.setRows(5);
         jScrollPane2.setViewportView(txtCast);
 
         jPanel1.add(jScrollPane2);
 
+        txtSynopsis.setColumns(20);
+        txtSynopsis.setRows(5);
         jScrollPane3.setViewportView(txtSynopsis);
 
         jPanel1.add(jScrollPane3);
@@ -192,16 +222,47 @@ public class MovieBrowser extends javax.swing.JFrame {
 
         lblCurrentUser.setText("User:");
 
+        jLabel3.setText("Cost:");
+
+        txtCost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCostActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Cast");
+
+        jLabel5.setText("Synopsis");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 481, Short.MAX_VALUE)
+                .addComponent(jLabel5))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout rtPanelLayout = new javax.swing.GroupLayout(rtPanel);
         rtPanel.setLayout(rtPanelLayout);
         rtPanelLayout.setHorizontalGroup(
             rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rtPanelLayout.createSequentialGroup()
-                .addContainerGap(79, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rtPanelLayout.createSequentialGroup()
+                .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rtPanelLayout.createSequentialGroup()
                         .addComponent(lblPoster, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
+                        .addGap(30, 30, 30)
                         .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(rtPanelLayout.createSequentialGroup()
@@ -211,7 +272,7 @@ public class MovieBrowser extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, rtPanelLayout.createSequentialGroup()
                                     .addComponent(lblRuntime)
                                     .addGap(40, 40, 40)
-                                    .addComponent(txtRuntime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtRuntime, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, rtPanelLayout.createSequentialGroup()
                                     .addComponent(lblRated)
                                     .addGap(53, 53, 53)
@@ -222,14 +283,20 @@ public class MovieBrowser extends javax.swing.JFrame {
                                     .addComponent(txtGenre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, rtPanelLayout.createSequentialGroup()
                                     .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblDirector)
-                                        .addComponent(lblWriters)
-                                        .addComponent(lblTitle))
-                                    .addGap(43, 43, 43)
+                                        .addGroup(rtPanelLayout.createSequentialGroup()
+                                            .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lblDirector)
+                                                .addComponent(lblWriters)
+                                                .addComponent(lblTitle))
+                                            .addGap(43, 43, 43))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rtPanelLayout.createSequentialGroup()
+                                            .addComponent(jLabel3)
+                                            .addGap(61, 61, 61)))
                                     .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(txtTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                                         .addComponent(txtDirector, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtWriters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(txtWriters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtCost))))
                             .addComponent(lblCurrentUser))
                         .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rtPanelLayout.createSequentialGroup()
@@ -240,9 +307,10 @@ public class MovieBrowser extends javax.swing.JFrame {
                                     .addComponent(btnReturnMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btnHoldDvd, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
                                 .addGap(106, 106, 106)
-                                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                                    .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(33, 33, 33))))
         );
         rtPanelLayout.setVerticalGroup(
@@ -250,9 +318,13 @@ public class MovieBrowser extends javax.swing.JFrame {
             .addGroup(rtPanelLayout.createSequentialGroup()
                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rtPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
                         .addComponent(lblCurrentUser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(rtPanelLayout.createSequentialGroup()
                                 .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -286,17 +358,19 @@ public class MovieBrowser extends javax.swing.JFrame {
                             .addComponent(txtReleaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblReleaseDate)))
                     .addComponent(lblPoster, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHoldDvd, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnReturnMovie, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(23, 23, 23))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHoldDvd, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHoldBluray, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(rtPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnReturnMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(78, 78, 78))
         );
 
         jSplitPane1.setRightComponent(rtPanel);
@@ -307,14 +381,14 @@ public class MovieBrowser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1068, Short.MAX_VALUE)
+                .addComponent(jSplitPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1))
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE))
         );
 
         pack();
@@ -348,6 +422,10 @@ public class MovieBrowser extends javax.swing.JFrame {
         new LoginForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void txtCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostActionPerformed
 
     /**
      * @param args the command line arguments
@@ -569,6 +647,13 @@ public class MovieBrowser extends javax.swing.JFrame {
                 txtReleaseDate.setText(String.valueOf(rs.getDate("release_date")));
                 txtCast.setText(rs.getString("cast"));
                 txtSynopsis.setText(rs.getString("synopsis"));
+                
+                String costStr = rs.getString("costo");   // o rs.getBigDecimal("costo").toString()
+                if (costStr != null) {
+                    txtCost.setText(costStr);
+                } else {
+                    txtCost.setText("");
+                }
 
                 boolean availDvd = rs.getInt("available_dvd") == 1;
                 boolean availBluray = rs.getInt("available_bluray") == 1;
@@ -623,7 +708,11 @@ private void setLargePoster(String posterPath) {
     private javax.swing.JButton btnHoldDvd;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnReturnMovie;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -640,13 +729,14 @@ private void setLargePoster(String posterPath) {
     private javax.swing.JPanel ltPanel;
     private javax.swing.JPanel pnlMovies;
     private javax.swing.JPanel rtPanel;
-    private java.awt.TextArea txtCast;
+    private javax.swing.JTextArea txtCast;
+    private javax.swing.JTextField txtCost;
     private java.awt.TextField txtDirector;
     private java.awt.TextField txtGenre;
     private java.awt.TextField txtRated;
     private java.awt.TextField txtReleaseDate;
     private java.awt.TextField txtRuntime;
-    private java.awt.TextArea txtSynopsis;
+    private javax.swing.JTextArea txtSynopsis;
     private java.awt.TextField txtTitle;
     private java.awt.TextField txtWriters;
     // End of variables declaration//GEN-END:variables
