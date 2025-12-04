@@ -779,12 +779,14 @@ public class MovieBrowser extends javax.swing.JFrame {
     btnHoldBluray.setEnabled(false);
 }
     // Nombre: placeHold
-    // Propósito: Crear una reserva (PENDING) para el usuario actual y el formato indicado (DVD/BLURAY) de la película seleccionada.
+    // Propósito: Crear una reserva (PENDING) para el usuario actual y el formato indicado (DVD/BLURAY) de la película seleccionada
+    //            y mostrar un recibo al finalizar.
     // PreCondiciones: selectedMovieId no puede ser null, currentUserId debe ser válido y las tablas movies/reservations deben existir.
-    // PostCondiciones: Si hay disponibilidad, se inserta un registro en reservations, se marca el formato como no disponible y se recarga la interfaz.
+    // PostCondiciones: Si hay disponibilidad, se inserta un registro en reservations, se marca el formato como no disponible,
+    //                  se recarga la interfaz y se muestra un recibo.
     // Argumentos: format - formato a reservar ("DVD" o "BLURAY").
     // Valores: No devuelve valor, pero muestra mensajes y maneja transacciones (commit/rollback).
-    private void placeHold(String format) {
+private void placeHold(String format) {
     if (selectedMovieId == null) {
         JOptionPane.showMessageDialog(this,
                 "Please select a movie first.");
@@ -824,7 +826,6 @@ public class MovieBrowser extends javax.swing.JFrame {
         }
 
         // 2) Insert reservation
-        // price_per_day here is hardcoded as 2.50, adjust if needed
         String insertSql =
                 "INSERT INTO reservations " +
                 "(user_id, movie_id, price_per_day, reservation_date, " +
@@ -844,13 +845,13 @@ public class MovieBrowser extends javax.swing.JFrame {
             psUpd.executeUpdate();
         }
 
-        // Commit transaction
+        // 4) Commit transaction
         cn.commit();
 
-        JOptionPane.showMessageDialog(this,
-                "Hold placed for " + format + " successfully.");
+        // 5) Mostrar recibo de lo que se hizo
+        showHoldReceipt(format);
 
-        // 4) Refresh table and details
+        // 6) Refresh table and details
         loadAvailableMovies();
         loadMovieDetails(selectedMovieId);
 
@@ -868,8 +869,91 @@ public class MovieBrowser extends javax.swing.JFrame {
             if (cn != null) cn.setAutoCommit(true);
         } catch (Exception ignore) {}
     }
+}    
+
+    // Nombre: showHoldReceipt
+    // Propósito: Mostrar un recibo en un JOptionPane con los datos de la última reserva hecha por el usuario.
+    // PreCondiciones: Debe existir al menos una reserva PENDING para el par (user_id, movie_id, format).
+    // PostCondiciones: Se muestra un cuadro de diálogo con el recibo.
+    // Argumentos: format - formato reservado ("DVD" o "BLURAY").
+    // Valores: No devuelve valor.
+private void showHoldReceipt(String format) {
+    String sql =
+        "SELECT reservation_id, price_per_day, reservation_date, return_due_at, status " +
+        "FROM reservations " +
+        "WHERE user_id = ? AND movie_id = ? AND format = ? " +
+        "ORDER BY reservation_id DESC " +
+        "LIMIT 1";
+
+    try (Connection cn = DBConnection.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+
+        ps.setInt(1, currentUserId);
+        ps.setInt(2, selectedMovieId);
+        ps.setString(3, format.toUpperCase());
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int reservationId = rs.getInt("reservation_id");
+                String status = safeString(rs.getString("status"));
+
+                java.sql.Timestamp resTs = rs.getTimestamp("reservation_date");
+                java.sql.Timestamp dueTs = rs.getTimestamp("return_due_at");
+
+                String resStr = (resTs != null) ? resTs.toString() : "N/A";
+                String dueStr = (dueTs != null) ? dueTs.toString() : "N/A";
+
+                String pricePerDay = "";
+                try {
+                    pricePerDay = rs.getBigDecimal("price_per_day").toString();
+                } catch (Exception ex) {
+                    pricePerDay = "2.50"; // por si acaso
+                }
+
+                String movieTitle = safeString(txtTitle.getText());
+                String userText   = safeString(lblCurrentUser.getText());
+                String costText   = safeString(txtCost.getText());
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("HOLD RECEIPT\n\n");
+                sb.append(userText).append("\n\n");
+                sb.append("Reservation ID: ").append(reservationId).append("\n");
+                sb.append("Movie: ").append(movieTitle).append("\n");
+                sb.append("Format: ").append(format.toUpperCase()).append("\n");
+                sb.append("Status: ").append(status).append("\n\n");
+                sb.append("Price per day: $").append(pricePerDay).append("\n");
+                if (!costText.isEmpty()) {
+                    sb.append("Base cost: $").append(costText).append("\n");
+                }
+                sb.append("Reserved at: ").append(resStr).append("\n");
+                sb.append("Due date: ").append(dueStr).append("\n");
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        sb.toString(),
+                        "Hold receipt",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                // Por si no encuentra la reserva (caso raro)
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Hold placed, but receipt data was not found.",
+                        "Hold receipt",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        }
+
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.SEVERE, "Error building receipt", e);
+        JOptionPane.showMessageDialog(
+                this,
+                "Hold placed, but there was an error generating the receipt: " + e.getMessage()
+        );
+    }
 }
-    
+
     // Nombre: loadAvailableMovies
     // Propósito: Cargar todas las películas que tienen al menos un formato disponible y mostrarlas como tarjetas en el panel izquierdo.
     // PreCondiciones: La tabla movies debe existir y contener los campos movie_id, title, poster_url, available_dvd y available_bluray.
