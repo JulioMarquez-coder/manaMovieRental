@@ -449,7 +449,7 @@ public class EditMovies extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnEditActionPerformed
 
     private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
-        // TODO add your handling code here:
+        
         int row = jTable1.getSelectedRow();
     if (row == -1) {
         JOptionPane.showMessageDialog(this,
@@ -506,7 +506,7 @@ public class EditMovies extends javax.swing.JFrame {
             }
         }
 
-        // 2) Delete reservations history for this movie (optional, if allowed)
+        // 2) Delete reservations history for this movie 
         String deleteReservationsSql =
             "DELETE FROM reservations WHERE movie_id = ?";
         try (PreparedStatement psDelRes = cn.prepareStatement(deleteReservationsSql)) {

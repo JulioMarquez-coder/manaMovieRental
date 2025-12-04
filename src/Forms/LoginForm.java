@@ -158,14 +158,14 @@ public class LoginForm extends javax.swing.JFrame {
         return;
     }
 
-    // 💡 Plan B temporal: admin quemado en el código (sin BD)
+    // Admin creado en el código (sin BD)
     if (username.equals("admin") && password.equals("admin123")) {
         new AdminManagerScreens().setVisible(true);
         this.dispose();
         return;
     }
 
-    // 🔽 De aquí para abajo, lo de la base de datos (cuando ya esté funcionando)
+  
     try (Connection cn = DBConnection.getConnection()) {
 
         String sql = "SELECT user_id, role FROM users " +
@@ -185,7 +185,7 @@ if (rs.next()) {
         new AdminManagerScreens().setVisible(true);
         this.dispose();
     } else {
-        // 👇 open user movie screen
+        // open user movie screen
         new MovieBrowser(userId).setVisible(true);
         this.dispose();
     }
